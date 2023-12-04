@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import cors from "cors";
-import { CreateCourse } from "../controllers/courseController.js";
+import { CreateCourse, GetCourse } from "../controllers/courseController.js";
 router.use(
   cors({
     credentials: true,
@@ -9,6 +9,7 @@ router.use(
   })
 );
 
+router.get("/", GetCourse);
 router.post("/create", CreateCourse);
 
 export default router;

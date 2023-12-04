@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cards from "./course/Cards";
 export default function Main() {
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    axios
+      .get("/courses")
+      .then((response) => {
+        setCourses(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <section className="relative flex flex-col items-center justify-center bg-white mt-[50px] px-6">
       <div className="w-full bg-gradient-to-r from-violet-600 via-red-500 to-yellow-500 flex items-center flex-col text-transparent bg-clip-text">
@@ -22,7 +36,9 @@ export default function Main() {
             <Link to={"/courses"}> View more </Link>
           </div>
         </div>
-        <div className="w-2/6"></div>
+        <div className="w-2/6">
+          {courses.length > 0 ? <Cards courses={courses} /> : "none"}
+        </div>
       </div>
     </section>
   );

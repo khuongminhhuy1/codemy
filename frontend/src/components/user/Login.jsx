@@ -1,33 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
-export default function Login() {
+export default function Login({ setIsLoggedIn }) {
   const navigate = useNavigate();
+
   const [data, setData] = useState({
     email: "",
     password: "",
   });
+
   const loginUser = async (e) => {
     e.preventDefault();
-    const { email, password } = data;
+
     try {
-      const { data } = await axios.post("/user/login", {
-        email,
-        password,
+      const { data: responseData } = await axios.post("/login", {
+        email: data.email,
+        password: data.password,
       });
-      if (data.error) {
-        toast.error(data.error);
+
+      if (responseData.error) {
+        toast.error(responseData.error);
       } else {
-        setData({});
+        setData({ email: "", password: "" }); // Clear form after successful login
         toast.success("Welcome user");
-        navigate("/user/profile");
+        Cookies.set("userInfo", JSON.stringify(responseData), { expires: 1 });
+        setIsLoggedIn(true);
+        navigate("/user/:id");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error during login:", error);
+      toast.error("An error occurred during login. Please try again.");
     }
   };
   return (
@@ -77,7 +84,7 @@ export default function Login() {
           <div className="text-sm mb-4 ">
             Don't have an account yet ?
             <Link
-              to={"/user/register"}
+              to={"/register"}
               className="text-blue-700  hover:text-red-700"
             >
               {" "}

@@ -5,6 +5,7 @@ import {
   GetProfile,
   LoginUser,
   RegisterUser,
+  LogoutUser,
 } from "../controllers/userController.js";
 
 router.use(
@@ -16,6 +17,7 @@ router.use(
 
 router.post("/login", LoginUser);
 router.post("/register", RegisterUser);
-router.get("/profile", GetProfile);
+router.get("/user/:id", GetProfile);
+router.post("/logout", LogoutUser);
 
 export default router;

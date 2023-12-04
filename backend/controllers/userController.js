@@ -70,9 +70,19 @@ export const LoginUser = async (req, res) => {
     console.log(error);
   }
 };
+//Log out
+export const LogoutUser = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res.json({ message: "Logout successful" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
-//Get Profile
-export const GetProfile = (req, res) => {
+//Get Profile by ID
+export const GetProfile = async (req, res) => {
   const { token } = req.cookies;
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {

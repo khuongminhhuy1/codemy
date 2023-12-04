@@ -10,40 +10,47 @@ export default function CreateCourse() {
     name: "",
     description: "",
     instructor: "",
-    image: "",
+    image: null,
   });
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setData({
-      ...data,
-      image: file,
-    });
+    setData((prevData) => ({ ...prevData, image: file }));
   };
 
   const CreateCourse = async (e) => {
     e.preventDefault();
     try {
-      const { name, description, instructor } = data;
-      const { image } = file;
+      let { name, description, instructor, image } = data;
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
       formData.append("instructor", instructor);
       formData.append("image", image);
 
-      const { data } = await axios.post("/course/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const responseData = await axios.post(
+        "/courses/create",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      // Handle success
+      setData({
+        name: "",
+        description: "",
+        instructor: "",
+        image: null,
       });
-      if (data.error) {
-        toast.error(error);
-      } else {
-        setData({});
-        toast.success("Course Created !");
-      }
+
+      toast.success("Course Created !");
+      navigate("/"); // Redirect to the home page or wherever appropriate
     } catch (error) {
-      console.log(error);
+      console.error("Error during course creation:", error);
+      toast.error("Failed to create course. Please try again.");
     }
   };
   return (
@@ -52,7 +59,7 @@ export default function CreateCourse() {
         <h1 className=" animate-fade-up text-4xl py-8 uppercase text-white font-black">
           Create Course
         </h1>
-        <form action="" onSubmit={CreateCourse}>
+        <form onSubmit={CreateCourse}>
           <label
             className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
             htmlFor="name"

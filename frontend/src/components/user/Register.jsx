@@ -15,7 +15,7 @@ export default function Register() {
     e.preventDefault();
     const { name, email, password } = data;
     try {
-      const { data } = await axios.post("/user/register", {
+      const { data } = await axios.post("/register", {
         name,
         email,
         password,
@@ -25,7 +25,7 @@ export default function Register() {
       } else {
         setData({});
         toast.success("User Created. Welcome new Dev");
-        navigate("/user/login");
+        navigate("/login");
       }
     } catch (error) {
       console.log(error);
@@ -90,10 +90,7 @@ export default function Register() {
             </button>
             <div className="text-sm">
               Already have an account ?
-              <Link
-                to={"/user/login"}
-                className="text-blue-700 hover:text-red-700"
-              >
+              <Link to={"/login"} className="text-blue-700 hover:text-red-700">
                 {" "}
                 Login{" "}
               </Link>
