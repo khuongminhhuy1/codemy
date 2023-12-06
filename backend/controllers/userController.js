@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { User } from "../models/userModel.js";
 import { hashPassword, comparePassword } from "../utils/hashPassword.js";
 import jwt from "jsonwebtoken";
@@ -52,12 +53,12 @@ export const LoginUser = async (req, res) => {
     const match = await comparePassword(password, user.password);
     if (match) {
       jwt.sign(
-        { email: user.email, id: user._id, name: user.name },
-        process.env.JWT_SECRET,
-        {},
+        { user },
+        "sdawudhpasuiodh123",
+        { expiresIn: "1h" },
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json(user);
+          res.status(200).json({ token });
         }
       );
     }
@@ -82,14 +83,7 @@ export const LogoutUser = async (req, res) => {
 };
 
 //Get Profile by ID
-export const GetProfile = async (req, res) => {
-  const { token } = req.cookies;
-  if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-      if (err) throw err;
-      res.json(user);
-    });
-  } else {
-    res.json(null);
-  }
+export const GetProfile = (req, res) => {
+  const profileUser = req.user;
+  res.status(200).json(profileUser);
 };

@@ -1,47 +1,63 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/slogan.png";
 import { toast } from "react-hot-toast";
 import Cookies from "js-cookie";
 
-export default function Header({ isLoggedIn, setIsLoggedIn }) {
+export default function Header({ userName }) {
   const navigate = useNavigate();
   const mainpageRoute = (e) => {
     navigate("/");
   };
+  const registerRoute = (e) => {
+    navigate("/register");
+  };
   const handleLogin = () => {
-    if (!isLoggedIn) {
+    if (!userName) {
       navigate("/login");
     } else {
-      Cookies.remove("userInfo");
-      setIsLoggedIn(false);
+      Cookies.remove("token");
+      // setIsLoggedIn(false);
       navigate("/");
     }
   };
 
-  const getUserInfo = () => {
-    const cookies = JSON.parse(Cookies.get("userInfo"));
-    return cookies.name;
-  };
+  // const getUserInfo = () => {
+  //   const cookies = JSON.parse(Cookies.get("token"));
+  //   console.log(cookies);
+  // };
   return (
-    <div className="flex bg-white w-full h-[48px] fixed z-1000 top-0">
-      <div className="w-full h-[48px] flex items-center justify-between px-6 lg:px-16">
+    <div className="flex flex-col bg-white w-full h-[48px] ">
+      <div className="w-full h-[48px] flex items-center justify-between px-6 lg:px-16 z-9999 sticky top-0">
         <img
           src={logo}
           alt=""
           className="w-[200px] h-[38px] cursor-pointer flex-initial  "
           onClick={mainpageRoute}
         />
-        <div className="flex ">
-          <span className="pr-5">
-            {isLoggedIn && `Hello ,${getUserInfo()}`}
-          </span>
-          <div onClick={handleLogin} className="cursor-pointer">
-            {isLoggedIn ? "Logout" : "Login"}
+        <div className="flex items-center">
+          <span className="pr-5">{userName && `Hello , ${userName}`}</span>
+          <div
+            onClick={handleLogin}
+            className="cursor-pointer hover:text-purple-700"
+          >
+            {userName ? "Logout" : "Login"}
+          </div>
+          <div className="">
+            {userName ? (
+              ""
+            ) : (
+              <Link
+                to={"/register"}
+                className="w-[80px] h-[40px] ml-5 p-2 text-white border-2 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-lg hover:text-purple-500"
+              >
+                Register
+              </Link>
+            )}
           </div>
         </div>
       </div>
-      <span className="block bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 h-[2px] w-full fixed top-12 z-1000"></span>
+      <span className="block bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 h-[2px] w-full top-12 z-1000 sticky"></span>
     </div>
   );
 }

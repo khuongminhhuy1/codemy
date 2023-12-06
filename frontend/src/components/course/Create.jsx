@@ -28,15 +28,11 @@ export default function CreateCourse() {
       formData.append("instructor", instructor);
       formData.append("image", image);
 
-      const responseData = await axios.post(
-        "/courses/create",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const responseData = await axios.post("/courses/create", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       // Handle success
       setData({
@@ -54,7 +50,7 @@ export default function CreateCourse() {
     }
   };
   return (
-    <section className="relative flex flex-col items-center justify-center bg-white mt-[50px] px-6">
+    <section className=" flex flex-col items-center justify-center bg-white mt-[50px] px-6">
       <div className=" w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-screen">
         <h1 className=" animate-fade-up text-4xl py-8 uppercase text-white font-black">
           Create Course
