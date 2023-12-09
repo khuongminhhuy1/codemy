@@ -22,7 +22,7 @@ export const RegisterUser = async (req, res) => {
 
     if (!password || password.length < 8) {
       return res.json({
-        error: "Password is required",
+        error: "Password is required and must be above 8 characters",
       });
     }
 
@@ -43,7 +43,6 @@ export const RegisterUser = async (req, res) => {
 export const LoginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
     if (!user) {
       return res.json({
@@ -54,7 +53,7 @@ export const LoginUser = async (req, res) => {
     if (match) {
       jwt.sign(
         { user },
-        "sdawudhpasuiodh123",
+        process.env.JWT_SECRET,
         { expiresIn: "1h" },
         (err, token) => {
           if (err) throw err;
@@ -71,6 +70,7 @@ export const LoginUser = async (req, res) => {
     console.log(error);
   }
 };
+
 //Log out
 export const LogoutUser = async (req, res) => {
   try {

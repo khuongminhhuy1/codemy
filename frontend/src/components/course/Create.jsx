@@ -50,17 +50,17 @@ export default function CreateCourse() {
     }
   };
   return (
-    <section className=" flex flex-col items-center justify-center bg-white mt-[50px] px-6">
-      <div className=" w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-screen">
-        <h1 className=" animate-fade-up text-4xl py-8 uppercase text-white font-black">
-          Create Course
-        </h1>
+    <div className=" w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-screen">
+      <h1 className=" animate-fade-up text-4xl py-8 uppercase text-white font-black">
+        Create Course
+      </h1>
+      <div className="animate-fade-down animate-delay-[500ms] p-4 flex flex-col justify-center items-center w-96 border bg-white rounded-lg">
         <form onSubmit={CreateCourse}>
           <label
             className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
             htmlFor="name"
           >
-            Course Name
+            Course Name :
           </label>
           <input
             type="text"
@@ -68,6 +68,7 @@ export default function CreateCourse() {
             id="name"
             onChange={(e) => setData({ ...data, name: e.target.value })}
             placeholder="Course Name"
+            className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-[350px] pl-3 truncate"
           />
           <label
             className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
@@ -77,7 +78,7 @@ export default function CreateCourse() {
               htmlFor="description"
               className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
             >
-              Description
+              Description :
             </label>
             <textarea
               name="description"
@@ -88,22 +89,29 @@ export default function CreateCourse() {
               placeholder="Description"
               cols="30"
               rows="10"
+              className="border border-gray-400 rounded-lg text-black w-[350px] pl-3 truncate py-3"
             />
             <label
               className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
               htmlFor="instructor"
             >
-              Instructor
+              Instructor :
             </label>
             <input
               type="text"
               name="instructor"
               id="instructor"
               onChange={(e) => setData({ ...data, instructor: e.target.value })}
+              className="border border-gray-400 rounded-lg text-black  h-10 w-[350px] pl-3 truncate"
             />
           </label>
-          <div>
-            <label htmlFor="image">Course Image:</label>
+          <div className="border p-3 rounded-lg border-gray-400">
+            <label
+              htmlFor="image"
+              className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
+            >
+              Course Image:
+            </label>
             <input
               type="file"
               id="image"
@@ -112,9 +120,14 @@ export default function CreateCourse() {
               onChange={handleImageChange}
             />
           </div>
-          <button type="submit">Create</button>
+          <button
+            type="submit"
+            className=" border-2 border-black-500 rounded-lg text-white bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-3 mt-8 mb-3 flex w-full justify-center items-center"
+          >
+            Create
+          </button>
         </form>
       </div>
-    </section>
+    </div>
   );
 }

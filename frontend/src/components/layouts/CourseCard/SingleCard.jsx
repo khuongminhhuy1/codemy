@@ -11,7 +11,7 @@ export default function SingleCard({ course }) {
       <div key={course._id} className="cursor-pointer" onClick={showRoute}>
         <img
           className="rounded-lg md:w-[300px] lg:w-[400px] h-[225px] mr-16 ml-9 mb-5 z-0 "
-          src={`http://localhost:8080/${course.image}`}
+          src={`http://localhost:8080/images/${course.image}`}
           alt={course.name}
         />
       </div>

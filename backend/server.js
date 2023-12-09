@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 const app = express();
 import { connectDatabase } from "./config/db.js";
@@ -13,6 +14,7 @@ const __dirname = dirname(__filename);
 //Routes
 import user from "./routes/userRoute.js";
 import course from "./routes/courseRoute.js";
+import lesson from "./routes/lessonRoute.js";
 
 //Connect Database
 connectDatabase();
@@ -23,8 +25,6 @@ app.use(express.json());
 // for parsing application/xwww-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// for posting images
-
 app.use(express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser());
 //CORS POLICY
@@ -32,6 +32,10 @@ app.use(cors({ credentials: true, origin: true }));
 
 app.use("/", user);
 app.use("/courses", course);
+app.use("/lessons", lesson);
+app.post("/test", (req, res, next) => {
+  console.log(req.body);
+});
 
 //Server
 const port = process.env.PORT || 5555;

@@ -3,7 +3,7 @@ import path from "path";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads"); // Set the destination folder for uploaded files
+    cb(null, "uploads/images"); // Set the destination folder for uploaded files
   },
   filename: function (req, file, cb) {
     cb(
@@ -18,3 +18,19 @@ const upload = (fileName) => {
 };
 
 export { upload };
+
+//Videos
+const VideoStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/videos");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const videoUpload = (fileName) => {
+  return multer({ storage: VideoStorage }).single(fileName);
+};
+
+export { videoUpload };

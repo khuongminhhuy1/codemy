@@ -5,7 +5,6 @@ export const CreateCourse = async (req, res, next) => {
   try {
     const uploadImage = upload("image");
     uploadImage(req, res, async (err) => {
-      // Check if an image file is uploaded
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded." });
       }
@@ -33,6 +32,12 @@ export const CreateCourse = async (req, res, next) => {
 
 //Get All Courses
 export const GetCourse = async (req, res) => {
+  // var page = req.query.page;
+  // if(page){
+
+  // } else {
+
+  //}
   try {
     const courses = await Course.find({});
     res.status(201).send({
@@ -60,51 +65,61 @@ export const GetCourseByID = async (req, res) => {
 };
 
 //Edit Course
+
 export const EditCourse = async (req, res) => {
   try {
-    const id = req.params.id;
-    // Check if all required fields are present
+    // Validate required fields
     const { name, description, instructor } = req.body;
+    console.log(req.body);
     if (!name || !description || !instructor) {
-      return res.status(400).json({
-        message: "All fields (name, description, instructor) are required.",
-      });
+      return res.status(400).send({ message: "All fields must be required" });
     }
 
-    // Check if an image file is uploaded
+    // If there's a file, upload it
+    const uploadImage = upload("image");
+    const id = req.params.id;
+    console.log(id);
     if (req.file) {
-      const uploadImage = upload("image");
       uploadImage(req, res, async (err) => {
         if (err) {
           console.error(err);
           return res.status(500).json({ message: "Error uploading file." });
         }
-
-        // Update the image filename in the req.body
-        req.body.image = req.file.filename;
-
+        // Update the object with the file information
+        const updateObject = {
+          ...req.body,
+          image: req.file.filename,
+        };
         // Update the course in the database
-        const result = await Course.findByIdAndUpdate(id, req.body);
+        const result = await Course.findByIdAndUpdate(id, updateObject);
 
         if (!result) {
           return res.status(404).json({ message: "Course not found" });
         }
-
-        return res.status(200).json({ message: "Course updated successfully" });
+        return res
+          .status(200)
+          .json({ message: "Course updated successfully", result });
       });
     } else {
-      // If no image is uploaded, update the course without changing the image
-      const result = await Course.findByIdAndUpdate(id, req.body);
+      // If no file, update without changing the image
+      const updateObject = {
+        ...req.body,
+      };
+
+      // Update the course in the database
+      const result = await Course.findByIdAndUpdate(id, updateObject);
 
       if (!result) {
         return res.status(404).json({ message: "Course not found" });
       }
 
-      return res.status(200).json({ message: "Course updated successfully" });
+      return res
+        .status(200)
+        .json({ message: "Course updated successfully", result });
     }
   } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({ message: error.message });
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -117,7 +132,6 @@ export const DeleteCourse = async (req, res) => {
     if (!result) {
       res.status(404).json({ message: "Course not found" });
     }
-
     return res.status(200).send({ message: "Course Deleted successfully" });
   } catch (error) {
     console.log(error.message);

@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "dotenv/config.js";
 import jwt from "jsonwebtoken";
 
 export function verifyToken(req, res, next) {
@@ -7,7 +7,7 @@ export function verifyToken(req, res, next) {
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  jwt.verify(token, "sdawudhpasuiodh123", (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       console.log(err);
       return res.status(401).json({ message: "Invalid token" });

@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../src/components/layouts/Header";
 import Profile from "../src/components/user/Profile";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../src/context/userContext";
 
 export default function UserProfile() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
@@ -37,7 +38,6 @@ export default function UserProfile() {
 
   return (
     <div className="">
-      <Header userName={user ? user.name : ""} />
       <Profile user={user} />
     </div>
   );

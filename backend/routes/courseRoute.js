@@ -8,6 +8,7 @@ import {
   GetCourse,
   GetCourseByID,
 } from "../controllers/courseController.js";
+
 router.use(
   cors({
     credentials: true,
@@ -19,6 +20,9 @@ router.get("/", GetCourse);
 router.post("/create", CreateCourse);
 router.get("/:id", GetCourseByID);
 router.put("/:id", EditCourse);
+router.post("/test",(req,res,next)=>{
+  console.log(req.body);
+})
 router.delete("/:id", DeleteCourse);
 
 export default router;

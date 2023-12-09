@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/slogan.png";
 import { toast } from "react-hot-toast";
 import Cookies from "js-cookie";
+import UserContext from "../../context/userContext";
 
-export default function Header({ userName }) {
+export default function Header() {
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
+  const userName = user?.name;
   const mainpageRoute = (e) => {
     navigate("/");
   };
@@ -17,15 +20,11 @@ export default function Header({ userName }) {
       navigate("/login");
     } else {
       Cookies.remove("token");
-      // setIsLoggedIn(false);
+      setUser({ name: "", email: "" });
       navigate("/");
     }
   };
 
-  // const getUserInfo = () => {
-  //   const cookies = JSON.parse(Cookies.get("token"));
-  //   console.log(cookies);
-  // };
   return (
     <div className="flex flex-col bg-white w-full h-[48px] ">
       <div className="w-full h-[48px] flex items-center justify-between px-6 lg:px-16 z-9999 sticky top-0">

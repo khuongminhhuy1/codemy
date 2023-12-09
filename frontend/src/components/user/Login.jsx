@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
-import Header from "../layouts/Header";
-export default function Login({ setIsLoggedIn }) {
+export default function Login() {
   const navigate = useNavigate();
 
   const [data, setData] = useState({
@@ -27,7 +26,6 @@ export default function Login({ setIsLoggedIn }) {
         setData({ email: "", password: "" }); // Clear form after successful login
         toast.success("Welcome user");
         Cookies.set("token", JSON.stringify(token), { expires: 1 });
-        // setIsLoggedIn(true);
         navigate(`/profile`);
       } else {
         toast.error(token.error);
