@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export const RegisterUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     //Validate
     if (!name) {
       return res.json({
@@ -31,6 +31,7 @@ export const RegisterUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      role,
     });
     const user = await newUser.save();
 
@@ -40,34 +41,36 @@ export const RegisterUser = async (req, res) => {
   }
 };
 
+//Login
 export const LoginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+
     if (!user) {
-      return res.json({
-        error: "User not found",
-      });
+      return res.status(401).json({ error: "Invalid credentials" });
     }
+
     const match = await comparePassword(password, user.password);
+
     if (match) {
-      jwt.sign(
-        { user },
+      const token = jwt.sign(
+        { _id: user._id, email: user.email, role: user.role },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" },
+        {
+          expiresIn: "1h",
+        },
         (err, token) => {
           if (err) throw err;
           res.status(200).json({ token });
         }
       );
-    }
-    if (!match) {
-      res.json({
-        error: "Invalid Username or Password",
-      });
+    } else {
+      return res.status(401).json({ error: "Invalid credentials" });
     }
   } catch (error) {
-    console.log(error);
+    console.error("Login error:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -87,3 +90,28 @@ export const GetProfile = (req, res) => {
   const profileUser = req.user;
   res.status(200).json(profileUser);
 };
+//Get all User
+export const GetUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.status(201).send({
+      count: users.length,
+      data: users,
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send(error.message);
+  }
+};
+
+// export const GetUserID = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const user = await User.findById(id);
+
+//     res.status(201).send(user);
+//   } catch (error) {
+//     console.log(error.message);
+//     res.status(500).send({ message: error.message });
+//   }
+// };

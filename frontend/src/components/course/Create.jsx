@@ -1,8 +1,9 @@
 import React from "react";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function CreateCourse() {
   const navigate = useNavigate();
@@ -12,13 +13,16 @@ export default function CreateCourse() {
     instructor: "",
     image: null,
   });
+  const handleAllCourseRoute = (e) => {
+    navigate("/admin/courses");
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setData((prevData) => ({ ...prevData, image: file }));
   };
 
-  const CreateCourse = async (e) => {
+  const handleCreateCourse = async (e) => {
     e.preventDefault();
     try {
       let { name, description, instructor, image } = data;
@@ -27,6 +31,8 @@ export default function CreateCourse() {
       formData.append("description", description);
       formData.append("instructor", instructor);
       formData.append("image", image);
+
+      console.log("image", image);
 
       const responseData = await axios.post("/courses/create", formData, {
         headers: {
@@ -55,7 +61,12 @@ export default function CreateCourse() {
         Create Course
       </h1>
       <div className="animate-fade-down animate-delay-[500ms] p-4 flex flex-col justify-center items-center w-96 border bg-white rounded-lg">
-        <form onSubmit={CreateCourse}>
+        <form onSubmit={handleCreateCourse}>
+          <FaArrowLeft
+            onClick={handleAllCourseRoute}
+            className="cursor-pointer"
+          ></FaArrowLeft>
+
           <label
             className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
             htmlFor="name"
@@ -105,13 +116,14 @@ export default function CreateCourse() {
               className="border border-gray-400 rounded-lg text-black  h-10 w-[350px] pl-3 truncate"
             />
           </label>
+
+          <label
+            htmlFor="image"
+            className="block text-sm mb-2 font-medium text-gray-900 dark:text-black"
+          >
+            Course Image:
+          </label>
           <div className="border p-3 rounded-lg border-gray-400">
-            <label
-              htmlFor="image"
-              className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
-            >
-              Course Image:
-            </label>
             <input
               type="file"
               id="image"

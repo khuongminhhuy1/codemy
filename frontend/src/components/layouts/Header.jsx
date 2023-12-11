@@ -7,8 +7,10 @@ import UserContext from "../../context/userContext";
 
 export default function Header() {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const userContext = useContext(UserContext);
+  const { user, setUser } = userContext;
   const userName = user?.name;
+
   const mainpageRoute = (e) => {
     navigate("/");
   };
@@ -35,7 +37,10 @@ export default function Header() {
           onClick={mainpageRoute}
         />
         <div className="flex items-center">
-          <span className="pr-5">{userName && `Hello , ${userName}`}</span>
+          <span className="pr-5">
+            <Link to={"/profile"}>{userName && `Hello , ${userName}`}</Link>
+          </span>
+
           <div
             onClick={handleLogin}
             className="cursor-pointer hover:text-purple-700"

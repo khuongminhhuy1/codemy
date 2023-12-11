@@ -15,6 +15,8 @@ const __dirname = dirname(__filename);
 import user from "./routes/userRoute.js";
 import course from "./routes/courseRoute.js";
 import lesson from "./routes/lessonRoute.js";
+import chapter from "./routes/chapterRoute.js";
+import admin from "./routes/AdminRoute.js";
 
 //Connect Database
 connectDatabase();
@@ -31,11 +33,10 @@ app.use(cookieParser());
 app.use(cors({ credentials: true, origin: true }));
 
 app.use("/", user);
+app.use("/admin", admin);
 app.use("/courses", course);
 app.use("/lessons", lesson);
-app.post("/test", (req, res, next) => {
-  console.log(req.body);
-});
+app.use("/chapter", chapter);
 
 //Server
 const port = process.env.PORT || 5555;

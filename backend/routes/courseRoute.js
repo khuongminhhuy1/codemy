@@ -8,6 +8,9 @@ import {
   GetCourse,
   GetCourseByID,
 } from "../controllers/courseController.js";
+import { upload } from "../utils/multer.js";
+import { checkExistImage } from "../middleware/validation.js";
+import { checkUserRole } from "../middleware/Auth.js";
 
 router.use(
   cors({
@@ -17,12 +20,14 @@ router.use(
 );
 
 router.get("/", GetCourse);
-router.post("/create", CreateCourse);
+router.post("/create", checkUserRole("admin"), CreateCourse);
 router.get("/:id", GetCourseByID);
-router.put("/:id", EditCourse);
-router.post("/test",(req,res,next)=>{
-  console.log(req.body);
-})
-router.delete("/:id", DeleteCourse);
+router.put(
+  "/:id",
+  upload("image"),
+  checkExistImage("Image is required"),
+  EditCourse
+);
+router.delete("/:id", checkUserRole("admin"), DeleteCourse);
 
 export default router;

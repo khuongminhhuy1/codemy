@@ -1,19 +1,9 @@
-var checkStudent = (req, res, next) => {
-  var role = req.data.role;
-  if (role === "student" || role === "teacher" || role === "admin") {
-    next();
+export const checkUserRole = (requiredRole) => (req, res, next) => {
+  // Kiểm tra nếu người dùng có quyền cần thiết
+  if (req.body && req.body.role === requiredRole) {
+    return next();
   } else {
-    res.json("No Permission");
+    return res.status(403).json({ message: "Permission denied" });
   }
 };
-
-var checkAdmin = (req, res, next) => {
-  var role = req.data.role;
-  if (role === "admin") {
-    next();
-  } else {
-    res.json("No Permission");
-  }
-};
-
-export default { checkStudent, checkTeacher, checkAdmin };
+export default { checkUserRole };

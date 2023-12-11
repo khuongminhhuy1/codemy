@@ -3,38 +3,33 @@ import { videoUpload } from "../utils/multer.js";
 
 export const CreateLesson = (req, res) => {
   try {
-    const uploadVideo = videoUpload("videoUrl");
+    const uploadVideo = videoUpload("uploadedVideo");
     uploadVideo(req, res, async (err) => {
-      if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded." });
-      }
-
       if (err) {
         console.error(err);
         return res.status(500).json({ message: "Error uploading file." });
       }
 
-      const { title, description, uploadedBy } = req.body;
-      // const existingCourse = await Course.findById(course);
-      // if (!existingCourse) {
-      //   return res.status(404).json({ message: "Course not found" });
-      // }
+      const { title, description, uploadedBy, videoUrl } = req.body;
+
+      let uploadedVideo;
+      if (!videoUrl && req.file) {
+        uploadedVideo = req.file.filename;
+      }
 
       const newLesson = new Lesson({
         title,
         description,
         uploadedBy,
-        // course,
-        videoUrl: req.file.filename,
+        videoUrl,
+        uploadedVideo,
       });
 
-      // Save Lessons
       const newLessonDocument = await newLesson.save();
 
-      // Optionally, return the video URL in the response
       return res
         .status(200)
-        .json({ lesson: newLessonDocument, videoUrl: req.file.filename });
+        .json({ lesson: newLessonDocument, videoUrl: uploadedVideo });
     });
   } catch (error) {
     console.log(error);
@@ -44,12 +39,6 @@ export const CreateLesson = (req, res) => {
 
 //Get Lessons
 export const GetLesson = async (req, res) => {
-  // var page = req.query.page;
-  // if(page){
-
-  // } else {
-
-  //}
   try {
     const lessons = await Lesson.find({});
     res.status(201).send({
@@ -76,6 +65,47 @@ export const GetLessonByID = async (req, res) => {
   }
 };
 
+//Edit Lesson
+export const EditLesson = async (req, res) => {
+  try {
+    const { title, description, uploadedBy, videoUrl } = req.body;
+    let updateFields = {
+      title,
+      description,
+      uploadedBy,
+    };
+
+    // Check if req.file exists (uploaded video)
+    if (req.file) {
+      updateFields = {
+        ...updateFields,
+        uploadedVideo: req.file.filename,
+        videoUrl: null, // Assuming you want to clear videoUrl when uploading a new video
+      };
+    } else if (videoUrl) {
+      // If videoUrl is provided in the request, update it
+      updateFields = {
+        ...updateFields,
+        videoUrl,
+        uploadedVideo: null, // Assuming you want to clear uploadedVideo when updating videoUrl
+      };
+    }
+    console.log("Update fields:", updateFields);
+    const lesson = await Lesson.findByIdAndUpdate(req.params.id, updateFields, {
+      new: true,
+    });
+
+    if (!lesson) {
+      return res.status(404).send("Lesson not found");
+    }
+
+    res.status(200).json({ message: "Lesson updated successfully", lesson });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
 //Delete Lesson
 export const DeleteLesson = async (req, res) => {
   try {
@@ -88,6 +118,6 @@ export const DeleteLesson = async (req, res) => {
     return res.status(200).send({ message: "Lesson Deleted successfully" });
   } catch (error) {
     console.log(error.message);
-    res.status(500).send({ message: error.message });
+    // res.status(500).send({ message: error.message });
   }
 };

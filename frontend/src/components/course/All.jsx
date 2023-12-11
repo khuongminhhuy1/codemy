@@ -68,6 +68,9 @@ export default function AllCourses() {
                     <Link to={`/courses/${course._id}`}>
                       <BsInfoCircle className="text-2xl text-green-800" />
                     </Link>
+                    <Link to={`/courses/edit/${course._id}`}>
+                      <AiOutlineEdit className="text-2xl text-blue-700" />
+                    </Link>
                     <Link to={`/courses/delete/${course._id}`}>
                       <MdOutlineDelete className="text-2xl text-red-800" />
                     </Link>

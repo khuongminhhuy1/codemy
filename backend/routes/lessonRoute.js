@@ -4,9 +4,11 @@ import cors from "cors";
 import {
   CreateLesson,
   DeleteLesson,
+  EditLesson,
   GetLesson,
   GetLessonByID,
 } from "../controllers/lessonController.js";
+import { checkUserRole } from "../middleware/Auth.js";
 
 router.use(
   cors({
@@ -16,8 +18,9 @@ router.use(
 );
 
 router.get("/", GetLesson);
-router.post("/create", CreateLesson);
+router.post("/create", checkUserRole("admin"), CreateLesson);
 router.get("/:id", GetLessonByID);
-router.delete("/:id", DeleteLesson);
+router.put("/:id", checkUserRole("admin"), EditLesson);
+router.delete("/:id", checkUserRole("admin"), DeleteLesson);
 
 export default router;

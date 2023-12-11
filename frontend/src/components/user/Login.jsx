@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+
 export default function Login() {
   const navigate = useNavigate();
 
@@ -21,18 +23,31 @@ export default function Login() {
         email: data.email,
         password: data.password,
       });
+
       if (res) {
         const token = res.data.token;
+        console.log("Token:", token);
         setData({ email: "", password: "" }); // Clear form after successful login
         toast.success("Welcome user");
         Cookies.set("token", JSON.stringify(token), { expires: 1 });
         navigate(`/profile`);
+
+        const decodedToken = jwtDecode(token);
+        console.log("Decoded Token:", decodedToken);
+        const userRole = await decodedToken.role;
+        console.log("User Role:", userRole);
+
+        if (userRole === "admin") {
+          navigate(`/admin`);
+        } else {
+          navigate(`/profile`);
+        }
       } else {
         toast.error(token.error);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      toast.error("An error occurred during login. Please try again.");
+      toast.error("Email Invalid or Password incorrect. Please try again");
     }
   };
   return (

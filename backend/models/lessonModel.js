@@ -11,13 +11,14 @@ const lessonSchema = mongoose.Schema(
     },
     videoUrl: {
       type: String,
-      required: true,
     },
     uploadedBy: {
       type: String,
       required: true,
     },
-    
+    uploadedVideo: {
+      type: String,
+    },
   },
   {
     timestamps: true,

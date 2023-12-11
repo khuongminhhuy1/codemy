@@ -1,8 +1,13 @@
 import React from "react";
-
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 export default function DeleteLesson() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const lessonRoute = () => {
+    navigate(`/admin/lessons`);
+  };
   const handleDelete = () => {
     axios
       .delete(`/lessons/${id}`)
@@ -34,7 +39,7 @@ export default function DeleteLesson() {
           </button>
           <button
             type="submit"
-            onClick={navigate(`/admin/lessons`)}
+            onClick={lessonRoute}
             className="px-6 py-4  border bg-blue-500 text-white rounded-lg"
           >
             No

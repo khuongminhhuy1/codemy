@@ -6,6 +6,9 @@ export default {
       backgroundImage: {
         "user-background": "url('../src/assets/wallpaper.jpg')",
       },
+      colors: {
+        "regal-blue": "#1677ff",
+      },
     },
   },
   plugins: [require("tailwindcss-animated")],

@@ -8,6 +8,7 @@ import {
   LogoutUser,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
+import { checkUserRole } from "../middleware/Auth.js";
 
 router.use(
   cors({
@@ -19,6 +20,7 @@ router.use(
 router.post("/login", LoginUser);
 router.post("/register", RegisterUser);
 router.get("/profile", verifyToken, GetProfile);
+// router.get("/user/:id", GetUserID);
 router.post("/logout", LogoutUser);
 
 export default router;
