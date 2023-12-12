@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
   const navigate = useNavigate();
-
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -29,18 +27,25 @@ export default function Login() {
         console.log("Token:", token);
         setData({ email: "", password: "" }); // Clear form after successful login
         toast.success("Welcome user");
-        Cookies.set("token", JSON.stringify(token), { expires: 1 });
-        navigate(`/profile`);
 
         const decodedToken = jwtDecode(token);
         console.log("Decoded Token:", decodedToken);
-        const userRole = await decodedToken.role;
-        console.log("User Role:", userRole);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            name: decodedToken.name,
+            email: decodedToken.email,
+            role: decodedToken.role,
+          })
+        );
+
+        const userRole = decodedToken.role;
 
         if (userRole === "admin") {
-          navigate(`/admin`);
+          navigate(`/admin/courses`);
         } else {
-          navigate(`/profile`);
+          navigate(`/`);
         }
       } else {
         toast.error(token.error);

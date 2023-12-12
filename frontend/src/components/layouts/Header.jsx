@@ -1,15 +1,21 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/slogan.png";
-import { toast } from "react-hot-toast";
-import Cookies from "js-cookie";
-import UserContext from "../../context/userContext";
 
 export default function Header() {
   const navigate = useNavigate();
-  const userContext = useContext(UserContext);
-  const { user, setUser } = userContext;
-  const userName = user?.name;
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+  });
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      console.log(user);
+    }
+  }, []);
 
   const mainpageRoute = (e) => {
     navigate("/");
@@ -18,10 +24,10 @@ export default function Header() {
     navigate("/register");
   };
   const handleLogin = () => {
-    if (!userName) {
+    if (!user.name) {
       navigate("/login");
     } else {
-      Cookies.remove("token");
+      localStorage.removeItem("user");
       setUser({ name: "", email: "" });
       navigate("/");
     }
@@ -38,17 +44,17 @@ export default function Header() {
         />
         <div className="flex items-center">
           <span className="pr-5">
-            <Link to={"/profile"}>{userName && `Hello , ${userName}`}</Link>
+            <Link to={"/profile"}>{user.name && `Hello , ${user.name}`}</Link>
           </span>
 
           <div
             onClick={handleLogin}
             className="cursor-pointer hover:text-purple-700"
           >
-            {userName ? "Logout" : "Login"}
+            {user.name ? "Logout" : "Login"}
           </div>
           <div className="">
-            {userName ? (
+            {user.name ? (
               ""
             ) : (
               <Link

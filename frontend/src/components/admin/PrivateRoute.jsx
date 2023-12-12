@@ -6,13 +6,15 @@ import NoPermission from "../error/NoPermission";
 
 export function PrivateRoutes({ roles, children }) {
   const contextValue = useContext(UserContext);
-
+  const { user, setUser } = contextValue;
+  console.log(user, "user");
   if (!contextValue) {
     // UserContext is undefined, handle accordingly (e.g., redirect to login)
     return <Navigate to="/login" />;
   }
 
   console.log("User Role:", user ? user.role : "Not logged in");
+
   console.log("Required Roles:", roles);
 
   const hasRequiredRole = () => {
