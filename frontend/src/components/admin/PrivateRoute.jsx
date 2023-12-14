@@ -1,21 +1,15 @@
 // PrivateRoutes.jsx
-import React, { useContext } from "react";
+import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import UserContext from "../../context/userContext";
 import NoPermission from "../error/NoPermission";
 
 export function PrivateRoutes({ roles, children }) {
-  const contextValue = useContext(UserContext);
-  const { user, setUser } = contextValue;
-  console.log(user, "user");
-  if (!contextValue) {
-    // UserContext is undefined, handle accordingly (e.g., redirect to login)
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
+  if (!user) {
     return <Navigate to="/login" />;
   }
-
-  console.log("User Role:", user ? user.role : "Not logged in");
-
-  console.log("Required Roles:", roles);
 
   const hasRequiredRole = () => {
     if (!user) {

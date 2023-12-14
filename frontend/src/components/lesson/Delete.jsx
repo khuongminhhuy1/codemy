@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 export default function DeleteLesson() {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const { id } = useParams();
   const lessonRoute = () => {
@@ -10,7 +11,12 @@ export default function DeleteLesson() {
   };
   const handleDelete = () => {
     axios
-      .delete(`/lessons/${id}`)
+      .delete(`/lessons/${id}`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: storedUser.role,
+        },
+      })
       .then(() => {
         toast.success("Lesson Deleted Successfully");
         navigate("/admin/lessons");

@@ -17,6 +17,7 @@ import course from "./routes/courseRoute.js";
 import lesson from "./routes/lessonRoute.js";
 import chapter from "./routes/chapterRoute.js";
 import admin from "./routes/AdminRoute.js";
+import quiz from "./routes/quizRoute.js";
 
 //Connect Database
 connectDatabase();
@@ -37,6 +38,7 @@ app.use("/admin", admin);
 app.use("/courses", course);
 app.use("/lessons", lesson);
 app.use("/chapter", chapter);
+app.use("/quiz", quiz);
 
 //Server
 const port = process.env.PORT || 5555;

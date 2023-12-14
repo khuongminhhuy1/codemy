@@ -34,9 +34,6 @@ export default function Main() {
           <div className="w-full  flex flex-wrap -mx-4 animate-fade-down animate-delay-[300ms] animate-ease-in-out ">
             {courses.length > 0 ? <Cards courses={courses} /> : "none"}
           </div>
-          <div className="font-black mt-10">
-            <Link to={"/courses"}> View more </Link>
-          </div>
         </div>
       </div>
     </div>

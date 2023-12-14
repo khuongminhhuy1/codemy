@@ -22,7 +22,7 @@ export default function CreateLesson() {
     e.preventDefault();
     try {
       const { title, description, videoUrl, uploadedBy, uploadedVideo } = data;
-
+      const storedUser = JSON.parse(localStorage.getItem("user"));
       const formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
@@ -38,10 +38,12 @@ export default function CreateLesson() {
           throw new Error("Either videoUrl or uploadedVideo is required.");
         }
       }
-
+      formData.append("role", storedUser.role);
+      console.log(storedUser.role);
       const responseData = await axios.post("/lessons/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: storedUser.role,
         },
       });
 
@@ -51,6 +53,7 @@ export default function CreateLesson() {
         videoUrl: "",
         uploadedBy: "",
         uploadedVideo: null,
+        role: "",
       });
 
       toast.success("Lesson Created !");
@@ -71,7 +74,7 @@ export default function CreateLesson() {
           <div className="">
             <label
               className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
-              htmlFor="name"
+              htmlFor="title"
             >
               Lesson title :
             </label>

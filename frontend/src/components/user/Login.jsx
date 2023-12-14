@@ -43,7 +43,7 @@ export default function Login() {
         const userRole = decodedToken.role;
 
         if (userRole === "admin") {
-          navigate(`/admin/courses`);
+          navigate(`/admin/lessons`);
         } else {
           navigate(`/`);
         }

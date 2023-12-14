@@ -18,9 +18,9 @@ router.use(
 );
 
 router.get("/", GetLesson);
-router.post("/create", checkUserRole("admin"), CreateLesson);
+router.post("/create", checkUserRole, CreateLesson);
 router.get("/:id", GetLessonByID);
-router.put("/:id", checkUserRole("admin"), EditLesson);
-router.delete("/:id", checkUserRole("admin"), DeleteLesson);
+router.put("/:id", checkUserRole, EditLesson);
+router.delete("/:id", checkUserRole, DeleteLesson);
 
 export default router;

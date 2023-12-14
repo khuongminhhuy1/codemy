@@ -4,7 +4,7 @@ import Profile from "../src/components/user/Profile";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../src/context/userContext";
+import { UserContext } from "../src/context/userContext";
 
 export default function UserProfile() {
   const navigate = useNavigate();

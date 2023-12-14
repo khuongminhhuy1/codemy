@@ -1,37 +1,28 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/slogan.png";
+import userInfo from "../../hooks/userInfo";
 
 export default function Header() {
   const navigate = useNavigate();
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-  });
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      console.log(user);
-    }
-  }, []);
+  const user = userInfo();
 
+  console.log("render Header");
   const mainpageRoute = (e) => {
     navigate("/");
-  };
-  const registerRoute = (e) => {
-    navigate("/register");
   };
   const handleLogin = () => {
     if (!user.name) {
       navigate("/login");
-    } else {
-      localStorage.removeItem("user");
-      setUser({ name: "", email: "" });
-      navigate("/");
     }
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
+  useEffect(() => {}, [user]);
 
   return (
     <div className="flex flex-col bg-white w-full h-[48px] ">
@@ -43,23 +34,21 @@ export default function Header() {
           onClick={mainpageRoute}
         />
         <div className="flex items-center">
-          <span className="pr-5">
-            <Link to={"/profile"}>{user.name && `Hello , ${user.name}`}</Link>
-          </span>
+          {user.name ? (
+            <span className="pr-5" onClick={handleLogout}>
+              Logout
+            </span>
+          ) : (
+            <span onClick={handleLogin}>Login</span>
+          )}
 
-          <div
-            onClick={handleLogin}
-            className="cursor-pointer hover:text-purple-700"
-          >
-            {user.name ? "Logout" : "Login"}
-          </div>
           <div className="">
             {user.name ? (
               ""
             ) : (
               <Link
                 to={"/register"}
-                className="w-[80px] h-[40px] ml-5 p-2 text-white border-2 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-lg hover:text-purple-500"
+                className="w-[80px] h-[40px] ml-5 p-2 text-white bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-lg hover:text-purple-500"
               >
                 Register
               </Link>

@@ -47,8 +47,11 @@ export const LoginUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
+    console.log(req.body, "body");
     if (!user) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.json({
+        error: "User not found",
+      });
     }
 
     const match = await comparePassword(password, user.password);
@@ -65,8 +68,12 @@ export const LoginUser = async (req, res) => {
           res.status(200).json({ token });
         }
       );
-    } else {
-      return res.status(401).json({ error: "Invalid credentials" });
+      console.log(token);
+    }
+    if (!match) {
+      res.json({
+        error: "Invalid Username or Password",
+      });
     }
   } catch (error) {
     console.error("Login error:", error);
@@ -104,14 +111,14 @@ export const GetUsers = async (req, res) => {
   }
 };
 
-// export const GetUserID = async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const user = await User.findById(id);
+export const GetUserID = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findById(id);
 
-//     res.status(201).send(user);
-//   } catch (error) {
-//     console.log(error.message);
-//     res.status(500).send({ message: error.message });
-//   }
-// };
+    res.status(201).send(user);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};

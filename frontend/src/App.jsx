@@ -9,7 +9,7 @@ import CreateCourse from "./components/course/Create";
 import Main from "./components/Main";
 import UserProfile from "../pages/userProfile";
 import Footer from "./components/layouts/Footer";
-import UserContext from "./context/userContext";
+import { UserContext } from "./context/userContext";
 import DeleteCourse from "./components/course/Delete";
 import ShowCourse from "./components/course/Show";
 import AllCourses from "./components/course/All";
@@ -50,87 +50,28 @@ function App() {
             <Route path="/courses/:id" element={<ShowCourse />} />
 
             {/* Admin */}
-            <Route
-              path="/admin"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <AdminPage />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              path="/admin/courses"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <AllCourses />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              exact
-              path="/courses/create"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <CreateCourse />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              path="/courses/delete/:id"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <DeleteCourse />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              path="/courses/edit/:id"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <EditCourse />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              path="/admin/lessons"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <AllLesson />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              path="/lessons/create"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <CreateLesson />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              path="/lessons/delete/:id"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <DeleteLesson />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              path="/chapter/:id"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <CourseSideBar />
-                </PrivateRoutes>
-              }
-            />
-            <Route
-              path="/chapter/create"
-              element={
-                <PrivateRoutes roles={["admin"]}>
-                  <CreateChapter />
-                </PrivateRoutes>
-              }
-            />
+
+            <Route exact element={<PrivateRoutes roles={"admin"} />}>
+              <Route path="/admin" element={<AdminPage />} />
+
+              <Route path="/admin/courses" element={<AllCourses />} />
+
+              <Route exact path="/courses/create" element={<CreateCourse />} />
+
+              <Route path="/courses/delete/:id" element={<DeleteCourse />} />
+
+              <Route path="/courses/edit/:id" element={<EditCourse />} />
+
+              <Route path="/admin/lessons" element={<AllLesson />} />
+
+              <Route path="/lessons/create" element={<CreateLesson />} />
+
+              <Route path="/lessons/delete/:id" element={<DeleteLesson />} />
+
+              <Route path="/chapter/:id" element={<CourseSideBar />} />
+
+              <Route path="/chapter/create" element={<CreateChapter />} />
+            </Route>
           </Routes>
         </Layout>
       </UserContext.Provider>

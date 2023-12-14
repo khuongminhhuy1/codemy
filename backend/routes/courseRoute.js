@@ -20,7 +20,7 @@ router.use(
 );
 
 router.get("/", GetCourse);
-router.post("/create", checkUserRole("admin"), CreateCourse);
+router.post("/create", checkUserRole, CreateCourse);
 router.get("/:id", GetCourseByID);
 router.put(
   "/:id",
@@ -28,6 +28,6 @@ router.put(
   checkExistImage("Image is required"),
   EditCourse
 );
-router.delete("/:id", checkUserRole("admin"), DeleteCourse);
+router.delete("/:id", checkUserRole, DeleteCourse);
 
 export default router;
