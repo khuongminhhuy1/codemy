@@ -1,84 +1,90 @@
 import React, { useEffect, useState } from "react";
 import VideoPlayer from "../layouts/VideoPlayer";
 import axios from "axios";
-import { SettingOutlined } from "@ant-design/icons";
+import { SettingOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 
 export default function ShowLectures() {
-  const [lesson, setLesson] = useState([]);
+  const [currentLesson, setCurrentLesson] = useState([]);
+  const [lessonId, setLessonId] = useState("");
   const [data, setData] = useState([]);
 
-  function getItem(label, key, icon, children, type) {
-    return {
-      key,
-      icon,
-      children,
-      label,
-      type,
-    };
-  }
-  let items = [
-    getItem("Navigation Three", "sub4", <SettingOutlined />, [
-      getItem("Option 9", "9"),
-      getItem("Option 10", "10"),
-      getItem("Option 11", "11"),
-      getItem("Option 12", "12"),
-    ]),
-  ];
-
   useEffect(() => {
-    axios
-      .get("/lessons")
-      .then((res) => {
-        setLesson(res.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    // get Chapter
     axios
       .get("/chapter")
       .then((res) => {
         if (res.data.data) {
-          console.log(items, "items");
-          items = dsa;
-          console.log("dsa", dsa);
+          let totalLesson = 0;
+          const data = res.data.data.map((chapter, chapterIndex) => {
+            return {
+              key: chapter._id,
+              label: `${chapterIndex + 1}.${chapter.content}`,
+              icon: <PlayCircleOutlined />,
+              children: chapter.lessonInfo.map((lesson, index) => {
+                totalLesson++;
+                // if (index === 0) {
+                //   getVideoById(lesson._id);
+                // }
+                return {
+                  key: lesson._id,
+                  label: `${totalLesson}. ${lesson.title}`,
+                };
+              }),
+            };
+          });
+          setData(data);
         }
       })
       .catch((error) => {
         console.log(error);
       });
-    // get Chapter
   }, []);
-
   const onClick = (e) => {
-    console.log("click ", e);
+    getVideoById(e.key);
   };
-
+  const getVideoById = (lessonId) => {
+    axios.get(`/lessons/${lessonId}`).then((res) => {
+      if (res.data) {
+        setCurrentLesson(res.data);
+        console.log(currentLesson);
+      }
+    });
+  };
+  useEffect(() => {}, [lessonId]);
   return (
-    <div className="w-full flex flex-row h-[1000px]">
-      <div className="w-4/5 bg-slate-700">
-        <VideoPlayer />
+    <div className="w-full flex flex-row ">
+      <div className="w-4/5 bg-gray-900 flex justify-center items-center p-5 ">
+        {currentLesson?.videoUrl ? (
+          <iframe
+            width="100%"
+            height="702"
+            src={currentLesson.videoUrl}
+            title={currentLesson.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+        ) : currentLesson.uploadedVideo ? (
+          <video
+            src={`http://localhost:8080/videos/${currentLesson.uploadedVideo}`}
+            alt={currentLesson.title}
+            controls
+          />
+        ) : (
+          <p> No video</p>
+        )}
       </div>
       <div className="w-1/5 bg-blue-500">
-        {/* <table>
-          {lesson.map((lesson, index) => (
-            <tr key={lesson._id}>
-              <td>{lesson.title}</td>
-            </tr>
-          ))}
-        </table> */}
-
         {/* Menu */}
         <Menu
           onClick={onClick}
           style={{
             width: "full",
           }}
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
+          defaultSelectedKeys={["65759bfc2d48c0da9b7fe852"]}
+          defaultOpenKeys={["657d751f9eada2d1eb34c578"]}
           mode="inline"
-          items={items}
+          items={data}
         />
       </div>
     </div>

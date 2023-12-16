@@ -41,9 +41,28 @@ export const GetChapters = async (req, res) => {
       {
         $lookup: {
           from: "lessons",
-          localField: "lessons",
-          foreignField: "_id",
+          let: { lessonIds: "$lessons" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $in: ["$_id", "$$lessonIds"],
+                },
+              },
+            },
+            {
+              $sort: {
+                createdAt: 1, // 1 for ascending order, -1 for descending order
+              },
+            },
+          ],
           as: "lessonInfo",
+        },
+      },
+      {
+        $project: {
+          content: 1,
+          lessonInfo: 1,
         },
       },
     ]);
