@@ -32,7 +32,7 @@ export default function Register() {
     }
   };
   return (
-    <section className="">
+    
       <div className=" w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-screen">
         <h1 className=" animate-fade-up text-4xl py-8 uppercase text-white font-black">
           Code : Register
@@ -98,6 +98,6 @@ export default function Register() {
           </form>
         </div>
       </div>
-    </section>
+
   );
 }

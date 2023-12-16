@@ -1,44 +1,36 @@
-import React, { useContext, useEffect, useState } from "react";
-import Header from "../src/components/layouts/Header";
+import React, { useEffect, useState } from "react";
 import Profile from "../src/components/user/Profile";
-import axios from "axios";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../src/context/userContext";
 
 export default function UserProfile() {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
-  const fetchData = async () => {
-    try {
-      const check = Cookies.get("token");
-      if (check) {
-        const cookies = JSON.parse(Cookies.get("token"));
-        if (cookies) {
-          const token = cookies;
-          const res = await axios.get("/profile", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (res.data) {
-            setUser({ name: res.data.name, email: res.data.email });
-          }
-        }
-      } else {
-        navigate("/login");
-      }
-    } catch (error) {
-      console.log(error);
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    avatar: "default-img.jpg",
+  });
+
+  const fetch = async (e) => {
+    if (user) {
+      setUserData({
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar || "default-img.jpg",
+      });
+    } else {
+      navigate("/login");
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetch();
   }, []);
-
   return (
     <div className="">
-      <Profile user={user} />
+      <Profile user={userData} />
     </div>
   );
 }

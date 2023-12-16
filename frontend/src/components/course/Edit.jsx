@@ -10,7 +10,7 @@ export default function EditCourse() {
     instructor: "",
     image: null,
   });
-
+  const storedUser = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -46,7 +46,9 @@ export default function EditCourse() {
         .put(`/courses/${id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: storedUser.role,
           },
+          
         })
         .then(() => {
           toast.success("Course Updated Successfully !");

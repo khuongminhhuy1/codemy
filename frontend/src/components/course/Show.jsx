@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import DeleteCourse from "./Delete";
 
@@ -37,12 +37,13 @@ export default function ShowCourse() {
                 className=" w-[650px] h-[300px] rounded-lg"
               />
             )}
-            <button
-              type="submit"
+
+            <Link
+              to={`/courses/${id}/lectures`}
               className="h-[65px] w-[200px] mt-12 text-white rounded-full  bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 flex justify-center items-center text-transform: uppercase font-black hover:text-purple-500"
             >
               Learn now
-            </button>
+            </Link>
           </div>
         </div>
       </div>

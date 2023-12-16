@@ -5,10 +5,16 @@ import axios from "axios";
 
 export default function DeleteCourse() {
   const navigate = useNavigate();
+  const storedUser = JSON.parse(localStorage.getItem("user"));
   const { id } = useParams();
   const handleDelete = () => {
     axios
-      .delete(`/courses/${id}`)
+      .delete(`/courses/${id}`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: storedUser.role,
+        },
+      })
       .then(() => {
         toast.success("Course Deleted Successfully");
         navigate("/admin/courses");

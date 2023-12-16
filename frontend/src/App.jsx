@@ -21,6 +21,10 @@ import CourseSideBar from "./components/layouts/CourseSideBar";
 import CreateChapter from "../pages/createChapter";
 import { PrivateRoutes } from "./components/admin/PrivateRoute";
 import AdminPage from "./components/admin";
+import QuizMain from "./components/quiz";
+import EditUser from "./components/user/Edit";
+import ShowLectures from "./components/lectures";
+
 axios.defaults.baseURL = "http://localhost:8080";
 axios.defaults.withCredentials = true;
 
@@ -46,9 +50,11 @@ function App() {
             <Route exact path="/login" element={<Login />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/profile/edit" element={<EditUser />} />
+
             {/* Course */}
             <Route path="/courses/:id" element={<ShowCourse />} />
-
+            <Route path="/courses/:id/lectures" element={<ShowLectures />} />
             {/* Admin */}
 
             <Route exact element={<PrivateRoutes roles={"admin"} />}>

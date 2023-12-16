@@ -1,15 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import logo from "../../assets/slogan.png";
 import userInfo from "../../hooks/userInfo";
 
 export default function Header() {
   const navigate = useNavigate();
-  const user = userInfo();
+  const { user, setUser } = userInfo();
 
-  console.log("render Header");
   const mainpageRoute = (e) => {
     navigate("/");
+  };
+  const profileRoute = (e) => {
+    navigate("/profile");
   };
   const handleLogin = () => {
     if (!user.name) {
@@ -19,10 +22,10 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    setUser(null);
     navigate("/");
+    toast.success("Logged Out Successfully");
   };
-
-  useEffect(() => {}, [user]);
 
   return (
     <div className="flex flex-col bg-white w-full h-[48px] ">
@@ -34,16 +37,22 @@ export default function Header() {
           onClick={mainpageRoute}
         />
         <div className="flex items-center">
-          {user.name ? (
-            <span className="pr-5" onClick={handleLogout}>
-              Logout
-            </span>
+          {user ? (
+            <>
+              <span className="pr-5">{`Hello, ${user.name}`}</span>
+              <span className="pr-5">
+                <Link to="/profile">Profile</Link>
+              </span>
+              <span className="pr-5" onClick={handleLogout}>
+                Logout
+              </span>
+            </>
           ) : (
-            <span onClick={handleLogin}>Login</span>
+            <span onClick={() => navigate("/login")}>Login</span>
           )}
 
-          <div className="">
-            {user.name ? (
+          <div>
+            {user ? (
               ""
             ) : (
               <Link

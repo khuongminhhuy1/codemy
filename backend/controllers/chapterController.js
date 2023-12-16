@@ -1,14 +1,13 @@
 import { Chapter } from "../models/chapterModel.js";
 
-
 export const CreateChapter = async (req, res) => {
   try {
-    const courseId = req.params.id;
+    const courses = req.body.courses;
     const lessons = req.body.lessons;
     const content = req.body.content;
 
     const newChapter = new Chapter({
-      courseId,
+      courses,
       content,
       lessons,
     });
@@ -32,5 +31,27 @@ export const GetChapterByID = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
+  }
+};
+
+//Get All
+export const GetChapters = async (req, res) => {
+  try {
+    const chapters = await Chapter.aggregate([
+      {
+        $lookup: {
+          from: "lessons",
+          localField: "lessons",
+          foreignField: "_id",
+          as: "lessonInfo",
+        },
+      },
+    ]);
+    res.status(200).send({
+      count: chapters.length,
+      data: chapters,
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

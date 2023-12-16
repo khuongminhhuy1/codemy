@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function userInfo() {
+const userInfo = () => {
   const storedUser = localStorage.getItem("user");
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-  });
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
     }
-  }, []);
-  return user;
-}
+  }, [storedUser]);
+
+  return { user , setUser };
+};
+
+export default userInfo;

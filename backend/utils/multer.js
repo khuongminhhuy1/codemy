@@ -6,6 +6,7 @@ const storage = multer.diskStorage({
     cb(null, "uploads/images"); // Set the destination folder for uploaded files
   },
   filename: function (req, file, cb) {
+    console.log(file,'file')
     cb(
       null,
       file.fieldname + "-" + Date.now() + path.extname(file.originalname)
@@ -34,3 +35,22 @@ const videoUpload = (fileName) => {
 };
 
 export { videoUpload };
+
+//avatar Storage
+const AvatarStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/avatars");
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+const avatarUpload = (fileName) => {
+  return multer({ storage: AvatarStorage }).single(fileName);
+};
+
+export { avatarUpload };

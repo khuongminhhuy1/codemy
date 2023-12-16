@@ -1,5 +1,4 @@
 const checkUserRole = (req, res, next) => {
-  console.log(req.headers, "header");
   if (req.headers && req.headers.authorization === "admin") {
     return next();
   } else {

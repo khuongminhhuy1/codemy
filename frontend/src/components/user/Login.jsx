@@ -34,9 +34,12 @@ export default function Login() {
         localStorage.setItem(
           "user",
           JSON.stringify({
+            id: decodedToken._id,
             name: decodedToken.name,
             email: decodedToken.email,
             role: decodedToken.role,
+            phoneNumber: decodedToken.phoneNumber,
+            avatar: decodedToken.avatar,
           })
         );
 

@@ -4,6 +4,7 @@ import cors from "cors";
 import {
   CreateChapter,
   GetChapterByID,
+  GetChapters,
 } from "../controllers/chapterController.js";
 
 router.use(
@@ -13,6 +14,7 @@ router.use(
   })
 );
 
+router.get("/", GetChapters);
 router.get("/:id", GetChapterByID);
 router.post("/create", CreateChapter);
 

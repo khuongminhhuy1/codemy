@@ -21,6 +21,14 @@ const userSchema = mongoose.Schema(
       default: "user",
       enum: ["user", "admin"],
     },
+    avatar: {
+      type: String,
+      default: "default-img.jpg",
+    },
+    phoneNumber: {
+      type: Number,
+      maxLength: 10,
+    },
   },
   {
     timestamps: true,

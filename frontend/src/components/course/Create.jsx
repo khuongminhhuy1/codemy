@@ -6,6 +6,7 @@ import axios from "axios";
 import { FaArrowLeft } from "react-icons/fa";
 
 export default function CreateCourse() {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const [data, setData] = useState({
     name: "",
@@ -37,6 +38,7 @@ export default function CreateCourse() {
       const responseData = await axios.post("/courses/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: storedUser.role,
         },
       });
 

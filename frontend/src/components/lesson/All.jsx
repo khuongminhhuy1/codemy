@@ -59,7 +59,10 @@ export default function AllLesson() {
                   {lesson.uploadedBy}
                 </td>
                 <td className="border border-slate-700 rounded-md text-center w-[400px]">
-                  <VideoPlayer lesson={lesson} />
+                  <VideoPlayer
+                    lesson={lesson}
+                    className="h-[200px] w-[400px]"
+                  />
                 </td>
                 <td className="border border-slate-700 rounded-md text-center">
                   <div className="flex justify-center gap x-4">

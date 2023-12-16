@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
+import { Course } from "./courseModel.js";
+import { Lesson } from "./lessonModel.js";
 
 const chapterSchema = mongoose.Schema(
   {
-    courseId: {
+    courses: {
       type: mongoose.Types.ObjectId,
       ref: "Course",
+      require: true,
     },
     content: { type: String, required: true },
-    lessons: { type: Array },
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" }],
   },
   {
     timestamps: true,
