@@ -10,7 +10,7 @@ const chapterSchema = mongoose.Schema(
       require: true,
     },
     content: { type: String, require: true },
-    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" }],
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" , require: true }],
   },
   {
     timestamps: true,

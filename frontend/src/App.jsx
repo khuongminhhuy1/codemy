@@ -54,7 +54,7 @@ function App() {
 
             {/* Course */}
             <Route path="/courses/:id" element={<ShowCourse />} />
-            <Route path="/courses/:id/lectures" element={<ShowLectures />} />
+            <Route path="/courses/:courseId/lectures" element={<ShowLectures />} />
             {/* Admin */}
 
             <Route exact element={<PrivateRoutes roles={"admin"} />}>
