@@ -9,7 +9,7 @@ const chapterSchema = mongoose.Schema(
       ref: "Course",
       require: true,
     },
-    content: { type: String, required: true },
+    content: { type: String, require: true },
     lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" }],
   },
   {
