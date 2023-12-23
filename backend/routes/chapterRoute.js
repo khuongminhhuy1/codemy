@@ -5,6 +5,7 @@ import {
   CreateChapter,
   GetChapterByID,
   GetChapters,
+  GetChaptersByCourseId,
 } from "../controllers/chapterController.js";
 
 router.use(
@@ -15,7 +16,8 @@ router.use(
 );
 
 router.get("/", GetChapters);
-router.get("/:id", GetChapterByID);
+router.get("/:courseId", GetChaptersByCourseId);
 router.post("/create", CreateChapter);
+
 
 export default router;

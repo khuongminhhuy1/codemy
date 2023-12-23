@@ -24,4 +24,6 @@ const courseSchema = mongoose.Schema(
   }
 );
 
+courseSchema.index({ name: "text", description: "text" });
+
 export const Course = mongoose.model("courses", courseSchema);

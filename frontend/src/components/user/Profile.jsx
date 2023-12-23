@@ -16,9 +16,12 @@ const Profile = ({ user }) => {
             <p>
               <strong>Name: </strong> {user.name}
             </p>
-            <p>
-              <strong>Email: </strong> {user.email}
-            </p>
+              <p>
+                <strong>Email: </strong> {user.email}
+              </p>
+              <p>
+                <strong>Phone Number: </strong> {user.phoneNumber}
+              </p>
           </>
         ) : (
           <p>No user information available</p>

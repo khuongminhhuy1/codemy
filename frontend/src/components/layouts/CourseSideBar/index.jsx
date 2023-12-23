@@ -1,9 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
 import { Menu } from "antd";
 import { useParams } from "react-router-dom";
 import axios from "axios";

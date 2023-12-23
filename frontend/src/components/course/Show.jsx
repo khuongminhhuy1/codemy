@@ -3,9 +3,30 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import DeleteCourse from "./Delete";
 
-export default function ShowCourse() {
+export default function ShowCourse({ courseId, user }) {
   const [course, setCourse] = useState({});
   const { id } = useParams();
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  useEffect(() => {
+    setIsBookmarked(user && user.bookmarks.includes(courseId));
+  }, [user, courseId]);
+
+  const handleBookmark = async () => {
+    try {
+      if (isBookmarked) {
+        // Remove bookmark
+        await axios.post(`/user/remove/${courseId}`);
+      } else {
+        // Add bookmark
+        await axios.post(`/user/add/${courseId}`);
+      }
+
+      // Toggle the bookmark state
+      setIsBookmarked(!isBookmarked);
+    } catch (error) {
+      console.error('Error handling bookmark:', error);
+    }
+  };
 
   useEffect(() => {
     axios
@@ -16,7 +37,7 @@ export default function ShowCourse() {
       .catch((error) => {
         console.log(error);
       });
-  }, [id]); // Add 'id' as a dependency to re-fetch data when the 'id' changes
+  }, [id]); 
 
   return (
     <div className="w-full flex flex-row  justify-center items-center bg-user-background py-5">
@@ -44,6 +65,15 @@ export default function ShowCourse() {
             >
               Learn now
             </Link>
+            <Link
+              to={`/courses/${id}/quiz`}
+              className="h-[65px] w-[200px] mt-12 text-white rounded-full  bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 flex justify-center items-center text-transform: uppercase font-black hover:text-purple-500"
+            >
+              Take test
+            </Link>
+            <button onClick={handleBookmark}>
+        {isBookmarked ? 'Remove Bookmark' : 'Bookmark'}
+      </button>
           </div>
         </div>
       </div>

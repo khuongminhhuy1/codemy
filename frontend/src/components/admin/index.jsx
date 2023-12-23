@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -9,9 +10,11 @@ const AdminPage = () => {
         <h1 className="animate-fade-up text-4xl py-8  text-white uppercase font-black">
           Admin
         </h1>
-        <div className="animate-fade-down animate-delay-[500ms] p-4 flex flex-col justify-center items-center w-96 border bg-white rounded-lg">
-          <h1 className="text-xl my-8 uppercase font-black">  </h1>
-
+        <div className="animate-fade-down animate-delay-[500ms] p-4 flex flex-col justify-center items-center w-11/12 border bg-white rounded-lg">
+          <div className="">
+            <Link to={"/admin/courses"}> Courses </Link>
+            <Link to={"/admin/lessons"}> Lessons </Link>
+          </div>
          
         </div>
       </div>

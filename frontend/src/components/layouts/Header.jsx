@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import logo from "../../assets/slogan.png";
 import userInfo from "../../hooks/userInfo";
+import CourseSearchComponent from "../search/SearchComponent";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -36,6 +37,9 @@ export default function Header() {
           className="w-[200px] h-[38px] cursor-pointer flex-initial  "
           onClick={mainpageRoute}
         />
+        <div className="">
+          <CourseSearchComponent />
+        </div>
         <div className="flex items-center">
           {user ? (
             <>

@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Select, Space } from "antd";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function CreateChapter() {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const [form] = Form.useForm();
-  const [data, setData] = useState({});
-  const [lesson, setLesson] = useState({
+  const [data, setData] = useState({
+    courses : "",
     content: "",
     lessons: [],
   });
-  const [course, setCourse] = useState({
-    course: [],
+  const [lesson, setLesson] = useState({
+    lessons: [],
   });
+  const [course, setCourse] = useState({});
 
+  const handleCourseChange = (CourseValue) => {
+    console.log("course ",CourseValue)
+    setData({ ...data, courses: CourseValue });
+  };
+  const handleLessonChange = (LessonsValue) => {
+    console.log("lesson", LessonsValue)
+    setData({...data, lessons : LessonsValue})
+  }
   useEffect(() => {
     axios.get(`/lessons`).then((res) => {
       if (res.data) {
@@ -36,20 +46,6 @@ export default function CreateChapter() {
       }
     });
   }, []);
-  const handleCreateChapter = (e) => {
-    let { courses, content, lessons } = data;
-    const formData = new FormData();
-    formData.append("courses", courses);
-    formData.append("content", content);
-    formData.append("lessons", lessons);
-    e.preventDefault();
-    axios.post("/chapter/create", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: storedUser.role,
-      },
-    });
-  };
 
   // Form
   const layout = {
@@ -66,8 +62,23 @@ export default function CreateChapter() {
       span: 16,
     },
   };
-  const onFinish = (values) => {
-    console.log(values);
+  const onFinish = async (values) => {
+    const { content } = values
+    const {courses , lessons} = data
+    const requestData = {
+      ...values,
+      courses,
+      lessons,
+    };
+    console.log("Complete Form Data:", requestData);
+    const res = await axios.post("/chapter/create",requestData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: storedUser.role,
+      },
+    });
+    toast.success("Chapter Created");
+
   };
   const onReset = () => {
     form.resetFields();
@@ -82,6 +93,7 @@ export default function CreateChapter() {
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
+  
   return (
     <div className="w-full flex flex-col items-center mt-5">
       <h1> ABC</h1>
@@ -94,7 +106,6 @@ export default function CreateChapter() {
           minWidth: 900,
           marginTop: 30,
         }}
-        onSubmitCapture={handleCreateChapter}
       >
         <Form.Item name="course" label="Courses">
           <Space
@@ -104,15 +115,16 @@ export default function CreateChapter() {
             direction="vertical"
           >
             <Select
-              mode="multiple"
+              mode="one"
               allowClear
               style={{
                 width: "100%",
               }}
               placeholder="Please select"
-              onChange={handleChange}
+              onChange={handleCourseChange}
               filterOption={filterOption}
               options={course.courses}
+              name = "courses"
             />
           </Space>
         </Form.Item>
@@ -133,7 +145,7 @@ export default function CreateChapter() {
                 width: "100%",
               }}
               placeholder="Please select"
-              onChange={handleChange}
+              onChange={handleLessonChange}
               filterOption={filterOption}
               options={lesson.lessons}
             />
@@ -143,7 +155,7 @@ export default function CreateChapter() {
           <Button
             type="primary"
             className=" bg-blue-500"
-            onClick={handleCreateChapter}
+            htmlType="submit"
           >
             Submit
           </Button>

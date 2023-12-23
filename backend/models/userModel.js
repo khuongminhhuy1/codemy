@@ -29,6 +29,15 @@ const userSchema = mongoose.Schema(
       type: Number,
       maxLength: 10,
     },
+    bookmarks: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
+    }],
+    progress: {
+      type: Map,
+      of: Number,
+      default: {},
+    },
   },
   {
     timestamps: true,

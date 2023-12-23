@@ -2,6 +2,7 @@ import "dotenv/config";
 import { User } from "../models/userModel.js";
 import { hashPassword, comparePassword } from "../utils/hashPassword.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 export const RegisterUser = async (req, res) => {
   try {
@@ -158,3 +159,55 @@ export const EditUser = async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 };
+//Bookmark
+export const Bookmark = async (req, res) => {
+  const userId = req.body._id;
+  const courseId = req.params.courseId;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Check if the course is already bookmarked
+    if (!user.bookmarks.includes(courseId)) {
+      user.bookmarks.push(courseId);
+      await user.save();
+
+      return res
+        .status(200)
+        .json({ message: "Course bookmarked successfully" });
+    } else {
+      return res.status(400).json({ error: "Course already bookmarked" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+export const RemoveBookmark = async (req, res) => {
+  const userId = req.user.id;
+  const courseId = req.params.courseId;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Remove the course from bookmarks
+    user.bookmarks = user.bookmarks.filter(
+      (bookmark) => bookmark.toString() !== courseId
+    );
+    await user.save();
+
+    return res.status(200).json({ message: "Bookmark removed successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+

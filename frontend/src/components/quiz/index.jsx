@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function QuizMain() {
+  
   return (
     <div className="">
       <h1> Quiz Test </h1>
@@ -10,7 +11,9 @@ export default function QuizMain() {
         <li>Each question has 4 options. You can only choose one </li>
         <li>The result will be declared at the end of the quiz</li>
       </ol>
-      <form action=""></form>
+      <form action="">
+
+      </form>
     </div>
   );
 }

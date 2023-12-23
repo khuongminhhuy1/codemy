@@ -8,10 +8,12 @@ import {
   LogoutUser,
   GetUserID,
   EditUser,
+  Bookmark,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { avatarUpload, upload } from "../utils/multer.js";
 import { checkExistImage } from "../middleware/validation.js";
+import { Search } from "../controllers/courseController.js";
 
 router.use(
   cors({
@@ -31,5 +33,8 @@ router.put(
 );
 router.get("/user/:id", GetUserID);
 router.post("/logout", LogoutUser);
+router.get("/search", Search);
+// router.post("/:userId/add", Bookmark);
+// router.post("/user/remove/:userId");
 
 export default router;
