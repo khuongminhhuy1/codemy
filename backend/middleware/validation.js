@@ -1,3 +1,4 @@
+import { Lesson } from "../models/lessonModel.js";
 const checkExistImage = (customMess) => (req, res, next) => {
   if (!req.file) {
     return res.status(400).json({ error: customMess });
@@ -7,7 +8,7 @@ const checkExistImage = (customMess) => (req, res, next) => {
 
 const checkExistVideo = (customMess) => (req, res, next) => {
   if (!req.file) {
-    return (uploadedVideo = null);
+    Lesson.uploadedVideo = null;
   }
   next();
 };

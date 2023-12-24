@@ -30,7 +30,7 @@ const QuizComponent = ({ questions, onSubmit }) => {
   const onFinish = async (values) => {
     // Call Api
     answerList.push(answer)
-    console.log('call API', 'body:',answerList)
+    console.log(answerList)
     try {
       const res = await axios.post('/result',{
         userId:JSON.parse(localStorage.getItem("user"))?.id,

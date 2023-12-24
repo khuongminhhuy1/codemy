@@ -26,10 +26,11 @@ const Profile = ({ user }) => {
         ) : (
           <p>No user information available</p>
         )}
-      </div>
-      <div className="">
+        <div className="w-full border-2 border-black-500 rounded-lg text-white bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-3 mt-8 mb-3 flex justify-center items-center">
         <Link to={"/profile/edit"}>Update Information</Link>
       </div>
+      </div>
+      
     </div>
   );
 };

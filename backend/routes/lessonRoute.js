@@ -9,6 +9,8 @@ import {
   GetLessonByID,
 } from "../controllers/lessonController.js";
 import { checkUserRole } from "../middleware/Auth.js";
+import { checkExistVideo } from "../middleware/validation.js";
+import { videoUpload } from "../utils/multer.js";
 
 router.use(
   cors({
@@ -20,7 +22,13 @@ router.use(
 router.get("/", GetLesson);
 router.post("/create", checkUserRole, CreateLesson);
 router.get("/:id", GetLessonByID);
-router.put("/:id", checkUserRole, EditLesson);
+router.put(
+  "/:id",
+  checkUserRole,
+  videoUpload("uploadedVideo"),
+  checkExistVideo("abc"),
+  EditLesson
+);
 router.delete("/:id", checkUserRole, DeleteLesson);
 
 export default router;

@@ -25,6 +25,7 @@ import EditUser from "./components/user/Edit";
 import ShowLectures from "./components/lectures";
 import SearchResultsPage from "./components/search/SearchResult";
 import QuizPage from "./components/quiz/Show";
+import EditLesson from "./components/lesson/Edit";
 
 
 axios.defaults.baseURL = "http://localhost:8080";
@@ -81,6 +82,8 @@ function App() {
 
               <Route path="/lessons/delete/:id" element={<DeleteLesson />} />
 
+              <Route path="/lessons/edit/:id" element={<EditLesson />} />             
+ 
               <Route path="/chapter/:id" element={<CourseSideBar />} />
 
               <Route path="/chapter/create" element={<CreateChapter />} />
