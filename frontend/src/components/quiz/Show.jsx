@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 const QuizPage = () => {
   const [questions , setQuestions] = useState([])
   const courseId = useParams();
+ 
   
   useEffect(()=>{
     const response = axios.get(`/quiz/${courseId.id}`).then((res) => {

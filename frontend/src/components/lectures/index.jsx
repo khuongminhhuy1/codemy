@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import VideoPlayer from "../layouts/VideoPlayer";
 import axios from "axios";
-import { SettingOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { PlayCircleOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useParams } from "react-router-dom";
 
@@ -9,11 +8,11 @@ export default function ShowLectures() {
   const [currentLesson, setCurrentLesson] = useState([]);
   const [lessonId, setLessonId] = useState("");
   const [data, setData] = useState([]);
-  const {courseId } = useParams();
+  const courseId = useParams();
   console.log(courseId)
   useEffect(() => {
     axios
-      .get(`/chapter/${courseId}`)
+      .get(`/chapter/${courseId.id}`)
       .then((res) => {
         if (res.data) {
           

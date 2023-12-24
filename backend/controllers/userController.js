@@ -49,7 +49,6 @@ export const LoginUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
-    console.log(req.body, "body");
     if (!user) {
       return res.json({
         error: "User not found",
@@ -66,6 +65,7 @@ export const LoginUser = async (req, res) => {
           email: user.email,
           role: user.role,
           avatar: user.avatar,
+          phoneNumber: user.phoneNumber,
         },
         process.env.JWT_SECRET,
         {
@@ -73,10 +73,9 @@ export const LoginUser = async (req, res) => {
         },
         (err, token) => {
           if (err) throw err;
-          res.status(200).json({ token });
+          res.status(200).json(token);
         }
       );
-      console.log(token);
     }
     if (!match) {
       res.json({
@@ -210,4 +209,3 @@ export const RemoveBookmark = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-

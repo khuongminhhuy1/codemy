@@ -80,13 +80,13 @@ export const GetChapters = async (req, res) => {
 };
 
 //Get Chapters by Course ID
-export const GetChaptersByCourseId = async (req,res) => {
+export const GetChaptersByCourseId = async (req, res) => {
   const courseId = req.params.courseId;
   try {
     const chapters = await Chapter.aggregate([
       {
         $match: {
-          courses: new mongoose.Types.ObjectId(courseId), 
+          courses: new mongoose.Types.ObjectId(courseId),
         },
       },
       {
@@ -117,10 +117,9 @@ export const GetChaptersByCourseId = async (req,res) => {
         },
       },
     ]);
+    console.log(chapters);
     return res.status(200).json(chapters);
-    
   } catch (error) {
     console.log(error);
   }
- 
-}
+};

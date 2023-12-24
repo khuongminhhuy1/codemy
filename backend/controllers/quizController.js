@@ -1,7 +1,7 @@
 import { Quiz } from "../models/quizModel.js";
 import mongoose from "mongoose";
 //Create Quiz
-const CreateQuiz = async (req, res) => {
+export const CreateQuiz = async (req, res) => {
   try {
     const courseId = req.body.courseId;
     const { question, options, correctAnswer } = req.body;
@@ -23,7 +23,7 @@ const CreateQuiz = async (req, res) => {
   }
 };
 //Get Quizzes
-const AllQuiz = async (req, res) => {
+export const AllQuiz = async (req, res) => {
   try {
     const quizzes = await Quiz.find({});
     return res.status(201).send({
@@ -36,7 +36,7 @@ const AllQuiz = async (req, res) => {
   }
 };
 // Get Quiz By CourseId
-const GetQuizByCourseId = async (req, res) => {
+export const GetQuizByCourseId = async (req, res) => {
   try {
     const courseId = req.params.courseId;
     const quizzes = await Quiz.find({ courseId });
@@ -45,5 +45,41 @@ const GetQuizByCourseId = async (req, res) => {
     console.log(error);
   }
 };
-
-export { CreateQuiz, AllQuiz, GetQuizByCourseId };
+//Delete Quiz
+export const DeleteQuiz = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await Quiz.findByIdAndDelete(id);
+    if (!result) {
+      res.status(404).json({ message: "Quiz not found" });
+    }
+    return res.status(200).send({ message: "Quiz Deleted successfully" });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+//Edit Quiz
+export const EditQuiz = async (req, res) => {
+  try {
+    const { questions, options, correctAnswer } = req.body;
+    const quiz = await Quiz.findByIdAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        questions,
+        options,
+        correctAnswer,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!quiz) {
+      return res.status(404).send("Quiz not found");
+    }
+    return res.status(200).send(quiz);
+  } catch (error) {
+    console.log(error);
+  }
+};
