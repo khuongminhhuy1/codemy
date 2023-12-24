@@ -1,25 +1,23 @@
 import { Quiz } from "../models/quizModel.js";
-
+import mongoose from "mongoose";
 //Create Quiz
 const CreateQuiz = async (req, res) => {
   try {
-    const courseId = req.params.id;
-    const { question, option1, option2, option3, option4, answer } = req.body;
+    const courseId = req.body.courseId;
+    const { question, options, correctAnswer } = req.body;
 
     const newQuiz = new Quiz({
       courseId,
       question,
-      option1,
-      option2,
-      option3,
-      option4,
-      answer,
+      options,
+      correctAnswer,
     });
     const quiz = await newQuiz.save();
     if (quiz) {
       return res.status(200).json({ message: "Quiz Created" }).send(quiz);
+    } else {
+      return res.status(401).json({ message: "Error Creating Quiz" });
     }
-    return res.status(401).json({ message: "Error Creating Quiz" });
   } catch (error) {
     console.log(error);
   }
@@ -37,5 +35,15 @@ const AllQuiz = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+// Get Quiz By CourseId
+const GetQuizByCourseId = async (req, res) => {
+  try {
+    const courseId = req.params.courseId;
+    const quizzes = await Quiz.find({ courseId });
+    return res.status(200).json(quizzes);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-export { CreateQuiz, AllQuiz };
+export { CreateQuiz, AllQuiz, GetQuizByCourseId };

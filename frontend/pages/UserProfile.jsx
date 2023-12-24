@@ -11,6 +11,7 @@ export default function UserProfile() {
     name: "",
     email: "",
     avatar: "default-img.jpg",
+    phoneNumber: "",
   });
 
   const fetch = async (e) => {
@@ -19,6 +20,7 @@ export default function UserProfile() {
         name: user.name,
         email: user.email,
         avatar: user.avatar || "default-img.jpg",
+        phoneNumber: user.phoneNumber,
       });
     } else {
       navigate("/login");

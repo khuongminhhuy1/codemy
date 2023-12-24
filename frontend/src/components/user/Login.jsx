@@ -26,7 +26,7 @@ export default function Login() {
         const token = res.data.token;
         console.log("Token:", token);
         setData({ email: "", password: "" }); // Clear form after successful login
-        toast.success("Welcome user");
+        
 
         const decodedToken = jwtDecode(token);
         console.log("Decoded Token:", decodedToken);
@@ -50,6 +50,7 @@ export default function Login() {
         } else {
           navigate(`/`);
         }
+        toast.success("Welcome user");
       } else {
         toast.error(token.error);
       }

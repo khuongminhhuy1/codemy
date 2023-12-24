@@ -32,7 +32,6 @@ export const CreateCourse = async (req, res, next) => {
 
 //Get All Courses
 export const GetCourse = async (req, res) => {
-
   try {
     const courses = await Course.find({});
     res.status(201).send({
@@ -101,5 +100,19 @@ export const DeleteCourse = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
+  }
+};
+//Search
+export const Search = async (req, res) => {
+  const searchTerm = req.query.q;
+  try {
+    const searchResults = await Course.find({
+      $text: { $search: searchTerm },
+    });
+
+    res.status(200).json(searchResults);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
