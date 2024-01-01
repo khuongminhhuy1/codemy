@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const AdminPage = () => {
   const navigate = useNavigate();
-  
+
   return (
     <div className="">
       <div className="w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-screen">
@@ -14,8 +14,8 @@ const AdminPage = () => {
           <div className="">
             <Link to={"/admin/courses"}> Courses </Link>
             <Link to={"/admin/lessons"}> Lessons </Link>
+            <Link to={"/admin/quiz"}> Quiz </Link>
           </div>
-         
         </div>
       </div>
     </div>

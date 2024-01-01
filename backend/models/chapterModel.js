@@ -6,11 +6,11 @@ const chapterSchema = mongoose.Schema(
   {
     courses: {
       type: mongoose.Types.ObjectId,
-      ref: "Course",
+      ref: "courses",
       require: true,
     },
     content: { type: String, require: true },
-    lessons: [{ type: mongoose.Types.ObjectId, ref: "Lesson" , require: true }],
+    lessons: [{ type: mongoose.Types.ObjectId, ref: "lessons" , require: true }],
   },
   {
     timestamps: true,

@@ -5,63 +5,61 @@ import axios from "axios";
 
 export default function CreateLesson() {
   const navigate = useNavigate();
-  const [data, setData] = useState({
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const [formData, setFormData] = useState({
     title: "",
     description: "",
-    videoUrl: "",
     uploadedBy: "",
-    uploadedVideo: null, // New field for uploaded video
+    videoType: "url",
+    videoValue: "",
   });
 
-  const handleVideoChange = (e) => {
-    const file = e.target.files[0];
-    setData((prevData) => ({ ...prevData, uploadedVideo: file }));
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const CreateLesson = async (e) => {
+  const handleFileChange = (e) => {
+    setFormData({
+      ...formData,
+      videoType: "file",
+      videoValue: e.target.files[0],
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { title, description, videoUrl, uploadedBy, uploadedVideo } = data;
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("uploadedBy", uploadedBy);
-      if (videoUrl) {
-        formData.append("videoUrl", videoUrl);
-      } else {
-        // If videoUrl is not present, check if uploadedVideo is present
-        if (uploadedVideo) {
-          formData.append("uploadedVideo", uploadedVideo);
-        } else {
-          // Handle the case where neither videoUrl nor uploadedVideo is present
-          throw new Error("Either videoUrl or uploadedVideo is required.");
-        }
+      const { title, description, uploadedBy, videoType, videoValue } =
+        formData;
+
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", title);
+      formDataToSend.append("description", description);
+      formDataToSend.append("uploadedBy", uploadedBy);
+
+      if (videoType === "url") {
+        formDataToSend.append("videoUrl", videoValue);
+      } else if (videoType === "file") {
+        formDataToSend.append("uploadedVideo", videoValue);
       }
-      formData.append("role", storedUser.role);
-      console.log(storedUser.role);
-      const responseData = await axios.post("/lessons/create", formData, {
+
+      // Make a POST request to create a new lesson
+      await axios.post("/lessons/create", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: storedUser.role,
+          Authorization: storedUser?.role || "", // Use optional chaining to handle null/undefined
         },
       });
 
-      setData({
-        title: "",
-        description: "",
-        videoUrl: "",
-        uploadedBy: "",
-        uploadedVideo: null,
-        role: "",
-      });
+      console.log("Lesson created successfully!", formData);
 
-      toast.success("Lesson Created !");
+      toast.success("Lesson Created");
       navigate("/admin/lessons");
-      console.log(responseData);
     } catch (error) {
-      console.error("Error during lesson creation:", error);
-      toast.error("Failed to create lesson. Please try again.");
+      console.error("Error creating lesson:", error);
     }
   };
   return (
@@ -70,93 +68,83 @@ export default function CreateLesson() {
         Create Lesson
       </h1>
       <div className="animate-fade-down animate-delay-[500ms] p-4 flex flex-col justify-center items-center w-[420px] border bg-white rounded-lg">
-        <form onSubmit={CreateLesson}>
-          <div className="">
-            <label
-              className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
-              htmlFor="title"
-            >
-              Lesson title :
-            </label>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              onChange={(e) => setData({ ...data, title: e.target.value })}
-              placeholder="Title"
-              className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-[380px] pl-3 truncate"
-            />
-          </div>
-          <div className="">
-            <label
-              htmlFor="description"
-              className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
-            >
-              Description :
-            </label>
-            <textarea
-              name="description"
-              id="description"
-              onChange={(e) =>
-                setData({ ...data, description: e.target.value })
-              }
-              placeholder="Description"
-              cols="30"
-              rows="10"
-              className="border pt-2 border-gray-400 rounded-lg text-black bg-white-800 w-[380px] pl-3 truncate"
-            />
-            <label
-              className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
-              htmlFor="uploadedBy"
-            >
-              Uploaded By :
-            </label>
-            <input
-              type="text"
-              name="uploadedBy"
-              id="uploadedBy"
-              onChange={(e) => setData({ ...data, uploadedBy: e.target.value })}
-              className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-[380px] pl-3 truncate"
-            />
-          </div>
+        <form className="w-full" onSubmit={handleSubmit}>
+          <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">
+            Title:
+          </label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-full pl-3 truncate"
+          />
 
-          <div className="">
-            <label
-              htmlFor="videoUrl"
-              className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
-            >
-              Video Url:
-            </label>
-            <input
-              type="text"
-              id="videoUrl"
-              name="videoUrl"
-              value={data.videoUrl}
-              onChange={(e) => setData({ ...data, videoUrl: e.target.value })}
-              className="border h-10 w-[380px] border-gray-400 rounded-lg text-black pl-3 truncate"
-            />
-          </div>
-          <div className="">
-            <label
-              htmlFor="uploadedVideo"
-              className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
-            >
-              Or Upload Video:
-            </label>
-            <input
-              type="file"
-              id="uploadedVideo"
-              name="uploadedVideo"
-              accept=".mp4, .avi, .mov, .mkv, video/*"
-              onChange={handleVideoChange}
-              className="border h-14 w-[380px] border-gray-400 rounded-lg text-black p-3 truncate"
-            />
-          </div>
+          <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">
+            Description:
+          </label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="border border-gray-400 rounded-lg text-black bg-white-800 h-[150px] w-full pl-3 truncate"
+          />
+
+          <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">
+            Uploaded By:
+          </label>
+          <input
+            type="text"
+            name="uploadedBy"
+            value={formData.uploadedBy}
+            onChange={handleChange}
+            className="w-full border border-gray-400 rounded-lg text-black bg-white-800 h-10  pl-3 truncate"
+          />
+
+          <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">
+            Video Type:
+          </label>
+          <select
+            name="videoType"
+            value={formData.videoType}
+            onChange={handleChange}
+            className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-full pl-3 truncate"
+          >
+            <option value="url">URL</option>
+            <option value="file">File</option>
+    
+          </select>
+
+          {formData.videoType === "url" && (
+            <div>
+              <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">Video URL:</label>
+              <input
+                type="text"
+                name="videoValue"
+                value={formData.videoValue}
+                onChange={handleChange}
+                className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-full pl-3 truncate"
+              />
+            </div>
+          )}
+
+          {formData.videoType === "file" && (
+            <div>
+              <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">Upload Video:</label>
+              <input
+                type="file"
+                name="videoValue"
+                onChange={handleFileChange}
+                className="pt-3 truncate"
+              />
+            </div>
+          )}
+
           <button
             type="submit"
             className=" border-2 border-black-500 rounded-lg text-white bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-3 mt-8 mb-3 flex w-full justify-center items-center"
           >
-            Create
+            Create Lesson
           </button>
         </form>
       </div>

@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import cors from "cors";
-import { GetResult } from "../controllers/resultController.js";
+import { GetResult, ReturnResult } from "../controllers/resultController.js";
 router.use(
   cors({
     credentials: true,
@@ -9,5 +9,6 @@ router.use(
   })
 );
 router.post("/", GetResult);
+router.get("/", ReturnResult)
 
 export default router;

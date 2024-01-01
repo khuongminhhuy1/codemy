@@ -7,6 +7,7 @@ import {
   DeleteQuiz,
   EditQuiz,
   GetQuizByCourseId,
+  GetQuizByID,
 } from "../controllers/quizController.js";
 import { checkUserRole } from "../middleware/Auth.js";
 
@@ -17,8 +18,10 @@ router.use(
   })
 );
 router.get("/", AllQuiz);
+
+router.get("/:id", GetQuizByID)
+router.get("/course/:courseId", GetQuizByCourseId);
 router.post("/create", checkUserRole, CreateQuiz);
-router.get("/:courseId", GetQuizByCourseId);
 router.put("/:id", checkUserRole, EditQuiz);
 router.delete("/:id", checkUserRole, DeleteQuiz);
 

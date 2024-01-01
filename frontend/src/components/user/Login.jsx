@@ -23,10 +23,9 @@ export default function Login() {
       });
 
       if (res) {
-        const token = res.data.token;
+        const token = res.data;
         console.log("Token:", token);
-        setData({ email: "", password: "" }); // Clear form after successful login
-        
+        setData({ email: "", password: "" });
 
         const decodedToken = jwtDecode(token);
         console.log("Decoded Token:", decodedToken);
@@ -46,7 +45,7 @@ export default function Login() {
         const userRole = decodedToken.role;
 
         if (userRole === "admin") {
-          navigate(`/admin/lessons`);
+          navigate(`/admin`);
         } else {
           navigate(`/`);
         }

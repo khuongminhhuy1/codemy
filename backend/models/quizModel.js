@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const QuizSchema = mongoose.Schema(
   {
     courseId: {
-      type: mongoose.Types.ObjectId,
-      ref: "Course",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "courses",
       require: true,
     },
     question: {
@@ -14,6 +14,7 @@ const QuizSchema = mongoose.Schema(
     options: [
       {
         type: String,
+        unique : true,
       },
     ],
     correctAnswer: {

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const learningProgressSchema = mongoose.Schema({
   userId: {
     type: mongoose.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     required: true,
     validate: {
       validator: (value) => mongoose.Types.ObjectId.isValid(value),

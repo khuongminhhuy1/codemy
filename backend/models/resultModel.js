@@ -4,7 +4,7 @@ const resultSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
       required: true,
     },
     totalQuizzes: {
@@ -13,6 +13,11 @@ const resultSchema = new mongoose.Schema(
     correctedAnswer: {
       type: Number,
     },
+    courseId : {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"courses",
+      required : true,
+    }
   },
   {
     timestamps: true,
