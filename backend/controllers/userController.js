@@ -104,6 +104,7 @@ export const GetProfile = (req, res) => {
   const profileUser = req.user;
   res.status(200).json(profileUser);
 };
+
 //Get all User
 export const GetUsers = async (req, res) => {
   try {
@@ -159,53 +160,35 @@ export const EditUser = async (req, res) => {
   }
 };
 //Bookmark
-export const Bookmark = async (req, res) => {
-  const userId = req.body._id;
-  const courseId = req.params.courseId;
-
+export const addBookmark = async (req,res) => {
   try {
     const user = await User.findById(userId);
-
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if the course is already bookmarked
-    if (!user.bookmarks.includes(courseId)) {
-      user.bookmarks.push(courseId);
-      await user.save();
+    await user.addBookmark(courseId);
 
-      return res
-        .status(200)
-        .json({ message: "Course bookmarked successfully" });
-    } else {
-      return res.status(400).json({ error: "Course already bookmarked" });
-    }
+    res.status(200).json({ message: "Bookmark added successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "Internal server error" });
   }
-};
-export const RemoveBookmark = async (req, res) => {
-  const userId = req.user.id;
-  const courseId = req.params.courseId;
+}
 
+export const removeBookmark = async (req,res) => {
+  const { userId, courseId } = req.params;
   try {
     const user = await User.findById(userId);
-
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Remove the course from bookmarks
-    user.bookmarks = user.bookmarks.filter(
-      (bookmark) => bookmark.toString() !== courseId
-    );
-    await user.save();
+    await user.removeBookmark(courseId);
 
-    return res.status(200).json({ message: "Bookmark removed successfully" });
+    res.status(200).json({ message: "Bookmark removed successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "Internal server error" });
   }
-};
+}

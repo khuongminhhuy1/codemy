@@ -31,17 +31,28 @@ const userSchema = mongoose.Schema(
     },
     bookmarks: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Course',
+      ref: 'courses',
     }],
-    progress: {
-      type: Map,
-      of: Number,
-      default: {},
-    },
+    
   },
   {
     timestamps: true,
   }
 );
+
+userSchema.methods.addBookmark = async function (courseId) {
+  if (!this.bookmarks.includes(courseId)) {
+    this.bookmarks.push(courseId);
+    await this.save();
+  }
+};
+
+userSchema.methods.removeBookmark = async function (courseId) {
+  if (this.bookmarks.includes(courseId)) {
+    this.bookmarks = this.bookmarks.filter((id) => id.toString() !== courseId.toString());
+    await this.save();
+  }
+};
+
 
 export const User = mongoose.model("users", userSchema);

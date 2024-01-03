@@ -90,7 +90,11 @@ const QuizComponent = ({ questions, onSubmit, courseId }) => {
                 Previous
               </Button>
               {currentQuestion === questions.length - 1 && (
-                <Button className="bg-blue-500 text-white" htmlType="submit">
+                <Button
+                  className="bg-blue-500 text-white"
+                  
+                  onClick={() => setModalOpen(true)}
+                >
                   Submit
                 </Button>
               )}

@@ -9,6 +9,6 @@ router.use(
   })
 );
 router.post("/", GetResult);
-router.get("/", ReturnResult)
+router.get("/:userId", ReturnResult)
 
 export default router;

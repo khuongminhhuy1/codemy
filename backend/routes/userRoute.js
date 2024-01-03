@@ -8,7 +8,8 @@ import {
   LogoutUser,
   GetUserID,
   EditUser,
-  Bookmark,
+  addBookmark,
+  removeBookmark,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { avatarUpload, upload } from "../utils/multer.js";
@@ -34,7 +35,7 @@ router.put(
 router.get("/user/:id", GetUserID);
 router.post("/logout", LogoutUser);
 router.get("/search", Search);
-// router.post("/:userId/add", Bookmark);
-// router.post("/user/remove/:userId");
+router.post("/:userId/bookmarks/:courseId",addBookmark)
+router.delete("/:userId/bookmarks/:courseId", removeBookmark)
 
 export default router;

@@ -69,7 +69,6 @@ export default function AllQuizzes() {
                   {q.question}
                 </td>
                 <td className="border border-slate-700 rounded-md text-center">
-                  {/* Map over options array to display each option */}
                   {q.options.map((option, optionIndex) => (
                     <div className="border" key={optionIndex}>
                       {option}
