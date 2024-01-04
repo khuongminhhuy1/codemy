@@ -66,6 +66,7 @@ export const LoginUser = async (req, res) => {
           role: user.role,
           avatar: user.avatar,
           phoneNumber: user.phoneNumber,
+          bookmarks : user.bookmarks
         },
         process.env.JWT_SECRET,
         {
@@ -161,6 +162,7 @@ export const EditUser = async (req, res) => {
 };
 //Bookmark
 export const addBookmark = async (req,res) => {
+  const { userId, courseId } = req.params;
   try {
     const user = await User.findById(userId);
     if (!user) {

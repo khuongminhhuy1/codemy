@@ -1,30 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import DeleteCourse from "./Delete";
+import toast from "react-hot-toast";
 
 export default function ShowCourse({ courseId, user }) {
   const [course, setCourse] = useState({});
   const { id } = useParams();
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const userId = storedUser ? storedUser.id : null;
+
   useEffect(() => {
-    setIsBookmarked(user && user.bookmarks.includes(courseId));
-  }, [user, courseId]);
+    setIsBookmarked(user && user.bookmarks.includes(id));
+  }, [user, id]);
 
   const handleBookmark = async () => {
     try {
-      if (isBookmarked) {
-        // Remove bookmark
-        await axios.post(`/user/remove/${courseId}`);
+      const isCourseInBookmarks = storedUser.bookmarks.includes(id);
+
+      if (isCourseInBookmarks) {
+        await axios.delete(`/${userId}/bookmarks/${id}`);
       } else {
-        // Add bookmark
-        await axios.post(`/user/add/${courseId}`);
+        await axios.post(`/${userId}/bookmarks/${id}`);
       }
 
       // Toggle the bookmark state
-      setIsBookmarked(!isBookmarked);
+      setIsBookmarked(!isCourseInBookmarks);
+
+      // Update local storage with the new bookmarks
+      const updatedUser = {
+        ...storedUser,
+        bookmarks: isCourseInBookmarks
+          ? storedUser.bookmarks.filter((bookmarkId) => bookmarkId !== id)
+          : [...storedUser.bookmarks, id],
+      };
+
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      toast.success(
+        isCourseInBookmarks
+          ? "Course removed from bookmarks"
+          : "Course bookmarked"
+      );
     } catch (error) {
-      console.error('Error handling bookmark:', error);
+      console.error("Error handling bookmark:", error);
     }
   };
 
@@ -37,7 +55,15 @@ export default function ShowCourse({ courseId, user }) {
       .catch((error) => {
         console.log(error);
       });
-  }, [id]); 
+  }, [id]);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    const isBookmarkedInLocalStorage = user && user.bookmarks.includes(id);
+
+    setIsBookmarked(isBookmarkedInLocalStorage);
+  }, [id]);
 
   return (
     <div className="w-full flex flex-row  justify-center items-center bg-user-background py-5">
@@ -72,8 +98,8 @@ export default function ShowCourse({ courseId, user }) {
               Take test
             </Link>
             <button onClick={handleBookmark}>
-        {isBookmarked ? 'Remove Bookmark' : 'Bookmark'}
-      </button>
+              {isBookmarked ? "Remove Bookmark" : "Bookmark"}
+            </button>
           </div>
         </div>
       </div>

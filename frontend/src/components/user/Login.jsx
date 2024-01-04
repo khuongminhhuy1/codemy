@@ -39,6 +39,7 @@ export default function Login() {
             role: decodedToken.role,
             phoneNumber: decodedToken.phoneNumber,
             avatar: decodedToken.avatar,
+            bookmarks: decodedToken.bookmarks,
           })
         );
 

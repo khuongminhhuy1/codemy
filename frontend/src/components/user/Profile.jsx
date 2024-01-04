@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Profile = ({ user }) => {
+  const navigate = useNavigate();
   const [result, setResult] = useState([]);
   const [course, setCourse] = useState([]);
+  const [courseImages, setCourseImages] = useState({});
 
   const calculatePoints = (correctAnswer, totalQuestions) => {
     const points = (correctAnswer / totalQuestions) * 100;
@@ -21,6 +23,52 @@ const Profile = ({ user }) => {
     }
   };
 
+  const fetchCourseDetails = async (courseId) => {
+    try {
+      const response = await axios.get(`/courses/${courseId}`);
+      const courseDetail = response.data;
+      setCourseImages((prevImages) => ({
+        ...prevImages,
+        [courseId]: courseDetail.image,
+      }));
+      console.log(courseImages);
+    } catch (error) {
+      console.error("Error fetching course details:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (user && user.bookmarks && user.bookmarks.length > 0) {
+      user.bookmarks.forEach((courseId) => {
+        fetchCourseDetails(courseId);
+      });
+    }
+  }, [user]);
+
+  const updateBookmarksInLocalStorage = (newBookmarks) => {
+    const storedUser = localStorage.getItem("user");
+    const currentUser = storedUser ? JSON.parse(storedUser) : null;
+
+    if (currentUser) {
+      const updatedUser = {
+        ...currentUser,
+        bookmarks: newBookmarks,
+      };
+
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+    }
+  };
+
+  const handleBookmark = (courseId) => {
+    const isBookmarked = user && user.bookmarks.includes(courseId);
+
+    if (isBookmarked) {
+      navigate(`/courses/${courseId}`);
+    } else {
+      const newBookmarks = user.bookmarks.filter((id) => id !== courseId);
+      updateBookmarksInLocalStorage(newBookmarks);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,13 +81,6 @@ const Profile = ({ user }) => {
     fetchData();
   }, []);
 
-  const resultsWithCourses = result.map((r) => {
-    const matchingCourse = course.find((c) => c._id === r.courseId);
-    return {
-      ...r,
-      course: matchingCourse ? matchingCourse.name : "Unknown Course",
-    };
-  });
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const user = storedUser ? JSON.parse(storedUser) : null;
@@ -49,6 +90,15 @@ const Profile = ({ user }) => {
       getResult(userId);
     }
   }, []);
+
+  const resultsWithCourses = result.map((r) => {
+    const matchingCourse = course.find((c) => c._id === r.courseId);
+    return {
+      ...r,
+      course: matchingCourse ? matchingCourse.name : "Unknown Course",
+    };
+  });
+
   return (
     <div className="w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-[1500px]">
       <div className="w-[1080px] h-[1200px] rounded-md bg-white p-4">
@@ -69,9 +119,22 @@ const Profile = ({ user }) => {
             <p>
               <strong>Phone Number: </strong> {user.phoneNumber}
             </p>
-            <p>
-              <strong>Bookmarked Course :</strong>
-            </p>
+            <strong>Bookmarked Course :</strong>
+            {user.bookmarks && user.bookmarks.length > 0 ? (
+              <div className="flex space-x-2">
+                {user.bookmarks.map((courseId) => (
+                  <img
+                    key={courseId}
+                    src={`http://localhost:8080/images/${courseImages[courseId]}`}
+                    alt={`Course ${courseId}`}
+                    className="h-[150px] w-[250px] rounded-lg"
+                    onClick={() => handleBookmark(courseId)}
+                  />
+                ))}
+              </div>
+            ) : (
+              "No Bookmarked Course"
+            )}
             <p>
               <strong>Test Result :</strong>{" "}
             </p>
@@ -98,31 +161,35 @@ const Profile = ({ user }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {resultsWithCourses.map((result, index) => (
-                    <tr key={result._id}>
-                      <td className="border border-slate-700 rounded-md text-center">
-                        {index + 1}
-                      </td>
-                      <td className="border border-slate-700 rounded-md text-center">
-                        {result.course}
-                      </td>
-                      <td className="border border-slate-700 rounded-md text-center">
-                        {result.correctedAnswer}
-                      </td>
-                      <td className="border border-slate-700 rounded-md text-center">
-                        {result.totalQuizzes}
-                      </td>
-                      <td className="border border-slate-700 rounded-md text-center">
-                        {calculatePoints(
-                          result.correctedAnswer,
-                          result.totalQuizzes
-                        )}
-                      </td>
-                      <td className="border border-slate-700 rounded-md text-center">
-                        {new Date(result.createdAt).toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
+                  {resultsWithCourses.map((result, index) => {
+                    const key = `${result._id}-${result.courseId}`;
+
+                    return (
+                      <tr key={key}>
+                        <td className="border border-slate-700 rounded-md text-center">
+                          {index + 1}
+                        </td>
+                        <td className="border border-slate-700 rounded-md text-center">
+                          {result.course}
+                        </td>
+                        <td className="border border-slate-700 rounded-md text-center">
+                          {result.correctedAnswer}
+                        </td>
+                        <td className="border border-slate-700 rounded-md text-center">
+                          {result.totalQuizzes}
+                        </td>
+                        <td className="border border-slate-700 rounded-md text-center">
+                          {calculatePoints(
+                            result.correctedAnswer,
+                            result.totalQuizzes
+                          )}
+                        </td>
+                        <td className="border border-slate-700 rounded-md text-center">
+                          {new Date(result.createdAt).toLocaleString()}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             ) : (
