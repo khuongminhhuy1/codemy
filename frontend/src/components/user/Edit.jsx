@@ -5,11 +5,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import userInfo from "../../hooks/userInfo";
 export default function EditUser() {
   const storedUser = JSON.parse(localStorage.getItem("user"));
-  const { user, setUser } = userInfo();
-  const { id } = storedUser;
+  // const { id } = storedUser;
+  const { id: userId } = useParams();
   const navigate = useNavigate();
+  const isAdmin = storedUser.role === "admin";
+  const [user, setUser] = useState({
+    isAdmin: "",
+  });
+
   useEffect(() => {
-    setUser(storedUser);
+    axios.get(`/user/${userId}`).then((res) => {
+      console.log(res.data, "ds");
+      setUser(res.data);
+    });
   }, []);
 
   const handleEditUser = async (e) => {
@@ -19,31 +27,26 @@ export default function EditUser() {
       formData.append("name", user.name);
       formData.append("email", user.email);
       formData.append("phoneNumber", user.phoneNumber);
-      formData.append("avatar", user.avatar);
+
+      // Check if a new image is selected
+      if (user.avatar instanceof File) {
+        formData.append("avatar", user.avatar);
+      }
+
+      if (storedUser.role === "admin") {
+        formData.append("role", user.role);
+      }
 
       const responseData = await axios
-        .put(`/profile/edit/${id}`, formData, {
+        .put(`/profile/edit/${userId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: storedUser.role,
           },
         })
         .then((res) => {
           if (res.data) {
-            localStorage.setItem(
-              "user",
-              JSON.stringify({
-                id: res.data._id,
-                name: res.data.name,
-                email: res.data.email,
-                role: res.data.role,
-                phoneNumber: res.data.phoneNumber,
-                avatar: res.data.avatar,
-              })
-            );
-
             toast.success("Update User Successfully");
-            navigate("/profile");
+            navigate(`/profile/${userId}`);
           } else {
             toast.error("Update User failed");
           }
@@ -74,7 +77,8 @@ export default function EditUser() {
             id="name"
             name="name"
             onChange={(e) => setUser({ ...user, name: e.target.value })}
-            placeholder="Name"
+            placeholder="Name (Cannot use special characters)"
+            pattern="[a-zA-Z0-9\s]*"
             className="border border-black-100 rounded-lg text-black bg-white-800 h-10 w-64 pl-3 truncate "
           />
 
@@ -122,6 +126,26 @@ export default function EditUser() {
             onChange={handleImageChange}
             className="border border-black-100 rounded-lg text-black bg-white-800 h-10 w-64 pl-3 truncate "
           />
+          {storedUser.role === "admin" && (
+            <div>
+              <label
+                htmlFor="role"
+                className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
+              >
+                Role
+              </label>
+              <select
+                id="role"
+                name="role"
+                value={user?.role || ""}
+                onChange={(e) => setUser({ ...user, role: e.target.value })}
+                className="border border-black-100 rounded-lg text-black bg-white-800 h-10 w-64 pl-3"
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          )}
 
           <button
             type="submit"

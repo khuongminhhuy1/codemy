@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 export const RegisterUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role , phoneNumber } = req.body;
 
     //Validate
     if (!name) {
@@ -34,6 +34,7 @@ export const RegisterUser = async (req, res) => {
       email,
       password: hashedPassword,
       role,
+      phoneNumber
     });
     const user = await newUser.save();
 
@@ -136,16 +137,16 @@ export const EditUser = async (req, res) => {
   try {
     const { name, email, password, phoneNumber } = req.body;
     console.log(req.file, "req.file");
-    const user = await User.findByIdAndUpdate(
+    const user = await User.findOneAndUpdate(
       {
         _id: req.params.id,
       },
       {
         name: req.body.name,
-        email: req.body.email,
         password: req.body.password,
         avatar: req.file.filename || "default-img.jpg",
         phoneNumber: req.body.phoneNumber,
+        role: req.body.role
       },
       {
         new: true,
@@ -192,5 +193,19 @@ export const removeBookmark = async (req,res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
+  }
+}
+export const DeleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+  
+    const result = await User.findByIdAndDelete(id);
+    if (!result) {
+      res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).send({ message: "User Deleted successfully" });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
   }
 }

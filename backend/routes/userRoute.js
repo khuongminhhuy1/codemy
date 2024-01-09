@@ -10,6 +10,8 @@ import {
   EditUser,
   addBookmark,
   removeBookmark,
+  DeleteUser,
+  GetUsers,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { avatarUpload, upload } from "../utils/multer.js";
@@ -23,6 +25,7 @@ router.use(
   })
 );
 
+router.get("/users", GetUsers);
 router.post("/login", LoginUser);
 router.post("/register", RegisterUser);
 router.get("/profile", verifyToken, GetProfile);
@@ -32,7 +35,9 @@ router.put(
   checkExistImage("Image is required"),
   EditUser
 );
+
 router.get("/user/:id", GetUserID);
+router.delete("/user/:id", DeleteUser)
 router.post("/logout", LogoutUser);
 router.get("/search", Search);
 router.post("/:userId/bookmarks/:courseId",addBookmark)

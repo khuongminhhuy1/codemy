@@ -1,9 +1,11 @@
 // src/components/EditLessonComponent.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const EditLesson = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [lesson, setLesson] = useState({});
   const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -79,7 +81,8 @@ const EditLesson = () => {
           Authorization: storedUser?.role || "", // Use optional chaining to handle null/undefined
         },
       });
-
+      toast.success("Lesson Updated Successfully !");
+      navigate("/admin/lessons");
       console.log("Lesson updated successfully!", formData);
     } catch (error) {
       console.error("Error updating lesson:", error);

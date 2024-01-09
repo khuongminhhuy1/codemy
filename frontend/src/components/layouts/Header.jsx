@@ -12,14 +12,7 @@ export default function Header() {
   const mainpageRoute = (e) => {
     navigate("/");
   };
-  const profileRoute = (e) => {
-    navigate("/profile");
-  };
-  const handleLogin = () => {
-    if (!user.name) {
-      navigate("/login");
-    }
-  };
+ 
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -45,7 +38,7 @@ export default function Header() {
             <>
               <span className="pr-5">{`Hello, ${user.name}`}</span>
               <span className="pr-5">
-                <Link to="/profile">Profile</Link>
+                <Link to={`/profile/${user.id}`}>Profile</Link>
               </span>
               <span className="pr-5" onClick={handleLogout}>
                 Logout

@@ -35,7 +35,7 @@ export default function UserProfile() {
   }, []);
   return (
     <div className="">
-      <Profile user={userData} />
+      <Profile />
     </div>
   );
 }

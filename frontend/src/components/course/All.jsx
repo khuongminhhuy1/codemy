@@ -23,7 +23,7 @@ export default function AllCourses() {
       </h1>
       <div className="w-11/12  flex flex-col justify-center items-center bg-white p-5 animate-fade-down animate-delay-300 animate-ease-in-out rounded-lg">
         <div className="py-5 flex flex-row">
-          <Link to={`/courses/create`}>
+          <Link to={`/admin/courses/create`}>
             <MdOutlineAddBox className="text-2xl text-blue-400" />
           </Link>
         </div>
@@ -65,13 +65,13 @@ export default function AllCourses() {
                 </td>
                 <td className="border border-slate-700 rounded-md text-center">
                   <div className="flex justify-center gap x-4">
-                    <Link to={`/courses/${course._id}`}>
+                    <Link to={`/admin/courses/${course._id}`}>
                       <BsInfoCircle className="text-2xl text-green-800" />
                     </Link>
-                    <Link to={`/courses/edit/${course._id}`}>
+                    <Link to={`/admin/courses/edit/${course._id}`}>
                       <AiOutlineEdit className="text-2xl text-blue-700" />
                     </Link>
-                    <Link to={`/courses/delete/${course._id}`}>
+                    <Link to={`/admin/courses/delete/${course._id}`}>
                       <MdOutlineDelete className="text-2xl text-red-800" />
                     </Link>
                   </div>

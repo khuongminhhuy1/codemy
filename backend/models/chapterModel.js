@@ -4,7 +4,7 @@ import { Lesson } from "./lessonModel.js";
 
 const chapterSchema = mongoose.Schema(
   {
-    courses: {
+    courseId: {
       type: mongoose.Types.ObjectId,
       ref: "courses",
       require: true,

@@ -3,10 +3,11 @@ const router = express.Router();
 import cors from "cors";
 import {
   CreateChapter,
-  GetChapterByID,
+  DeleteChapter,
   GetChapters,
   GetChaptersByCourseId,
 } from "../controllers/chapterController.js";
+import {checkUserRole} from "../middleware/Auth.js"
 
 router.use(
   cors({
@@ -17,7 +18,9 @@ router.use(
 
 router.get("/", GetChapters);
 router.get("/:courseId", GetChaptersByCourseId);
-router.post("/create", CreateChapter);
+router.post("/create",checkUserRole, CreateChapter);
+router.delete("/:id", checkUserRole, DeleteChapter)
+
 
 
 export default router;

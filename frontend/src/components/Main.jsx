@@ -28,8 +28,8 @@ export default function Main() {
             Learn various website coding languages
           </h1>
           <p className="text-xl py-10 animate-fade-left animate-delay-[150ms] animate-ease-in-out">
-            With 8 courses in Available. You'll have plenty of choices to learn{" "}
-            <br /> what you want most !{" "}
+            With a lot of courses in Available. You'll have plenty of choices to
+            learn what you want the most !{" "}
           </p>
           <div className="w-full  flex flex-wrap -mx-4 animate-fade-down animate-delay-[300ms] animate-ease-in-out ">
             {courses.length > 0 ? <Cards courses={courses} /> : "none"}

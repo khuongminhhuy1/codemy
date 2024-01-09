@@ -25,7 +25,7 @@ export default function AllLesson() {
       </h1>
       <div className="w-11/12 flex flex-col justify-center items-center bg-white p-5 animate-fade-down animate-delay-300 animate-ease-in-out rounded-lg">
         <div className="py-5 flex flex-row">
-          <Link to={`/lessons/create`}>
+          <Link to={`/admin/lessons/create`}>
             <MdOutlineAddBox className="text-2xl text-blue-400" />
           </Link>
         </div>
