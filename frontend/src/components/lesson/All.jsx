@@ -5,6 +5,8 @@ import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import VideoPlayer from "../layouts/VideoPlayer";
+import { BackButton } from "../layouts/BackButton";
+import AdminHeader from "../admin/adminHeader";
 
 export default function AllLesson() {
   const [lesson, setLesson] = useState([]);
@@ -19,15 +21,18 @@ export default function AllLesson() {
       });
   }, []);
   return (
-    <div className="w-full bg-user-background flex flex-col items-center justify-center py-10 h-[1000px]">
+    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center py-10">
+      <AdminHeader />
       <h1 className="animate-fade-up text-7xl py-8  text-white uppercase font-black">
         Lessons
       </h1>
       <div className="w-11/12 flex flex-col justify-center items-center bg-white p-5 animate-fade-down animate-delay-300 animate-ease-in-out rounded-lg">
-        <div className="py-5 flex flex-row">
+        <div className="py-5 flex flex-row w-full justify-between">
+          <BackButton />
           <Link to={`/admin/lessons/create`}>
             <MdOutlineAddBox className="text-2xl text-blue-400" />
           </Link>
+          <div className=""></div>
         </div>
         <table className="w-full border-seperate border-spacing-2 ">
           <thead>
@@ -39,7 +44,6 @@ export default function AllLesson() {
               </th>
               <th className="border border-slate-600 rounded-md">Instructor</th>
               <th className="border border-slate-600 rounded-md">Video</th>
-              {/* <th className="">Courses</th> */}
               <th className="border border-slate-600 rounded-md">Operations</th>
             </tr>
           </thead>
@@ -66,13 +70,13 @@ export default function AllLesson() {
                 </td>
                 <td className="border border-slate-700 rounded-md text-center">
                   <div className="flex justify-center gap x-4">
-                    <Link to={`/lessons/${lesson._id}`}>
+                    <Link to={`/admin/lessons/${lesson._id}`}>
                       <BsInfoCircle className="text-2xl text-green-800" />
                     </Link>
-                    <Link to={`/lessons/edit/${lesson._id}`}>
+                    <Link to={`/admin/lessons/edit/${lesson._id}`}>
                       <AiOutlineEdit className="text-2xl text-blue-700" />
                     </Link>
-                    <Link to={`/lessons/delete/${lesson._id}`}>
+                    <Link to={`/admin/lessons/delete/${lesson._id}`}>
                       <MdOutlineDelete className="text-2xl text-red-800" />
                     </Link>
                   </div>

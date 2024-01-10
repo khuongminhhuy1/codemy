@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { MdOutlineEdit, MdOutlineDelete } from "react-icons/md";
 import { BsInfoCircle } from "react-icons/bs";
+import { BackButton } from "../layouts/BackButton";
+import AdminHeader from "../admin/adminHeader";
 export default function AllUsers() {
   const id = useParams();
   const [user, setUser] = useState([]);
@@ -17,11 +19,15 @@ export default function AllUsers() {
       });
   }, []);
   return (
-    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center justify-center py-10">
+    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center py-10">
+      <AdminHeader />
       <h1 className="animate-fade-up text-7xl py-8  text-white uppercase font-black">
         Users
       </h1>
       <div className=" bg-white w-11/12 rounded-md p-20">
+        <div className="m-5">
+          <BackButton />
+        </div>
         <table className="w-full border-seperate border-spacing-2 ">
           <thead>
             <tr>

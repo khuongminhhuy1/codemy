@@ -113,11 +113,10 @@ export const DeleteLesson = async (req, res) => {
 
     const result = await Lesson.findByIdAndDelete(id);
     if (!result) {
-      res.status(404).json({ message: "Lesson not found" });
+     res.status(404).json({ message: "Lesson not found" });
     }
     return res.status(200).send({ message: "Lesson Deleted successfully" });
   } catch (error) {
     console.log(error.message);
-    // res.status(500).send({ message: error.message });
   }
 };

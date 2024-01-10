@@ -4,6 +4,8 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { BackButton } from "../layouts/BackButton";
+import AdminHeader from "../admin/adminHeader";
 export default function AllCourses() {
   const [course, setCourse] = useState([]);
   useEffect(() => {
@@ -17,15 +19,18 @@ export default function AllCourses() {
       });
   }, []);
   return (
-    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center justify-center py-10">
+    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center py-10">
+      <AdminHeader />
       <h1 className="animate-fade-up text-7xl py-8  text-white uppercase font-black">
         Courses
       </h1>
       <div className="w-11/12  flex flex-col justify-center items-center bg-white p-5 animate-fade-down animate-delay-300 animate-ease-in-out rounded-lg">
-        <div className="py-5 flex flex-row">
+        <div className="w-full py-5 flex flex-row justify-between items-between">
+          <BackButton />
           <Link to={`/admin/courses/create`}>
             <MdOutlineAddBox className="text-2xl text-blue-400" />
           </Link>
+          <div className=""></div>
         </div>
         <table className="w-full border-seperate border-spacing-2 ">
           <thead>

@@ -104,9 +104,11 @@ export const DeleteChapter = async (req, res) => {
 
     const result = await Chapter.findByIdAndDelete(id);
     if (!result) {
-      res.status(404).json({ message: "Chapter not found" });
+      return res.status(404).json({ message: "Chapter not found" });
+    } else {
+      return res.status(200).send({ message: "Chapter Deleted successfully" });
     }
-    return res.status(200).send({ message: "Chapter Deleted successfully" });
+   
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });

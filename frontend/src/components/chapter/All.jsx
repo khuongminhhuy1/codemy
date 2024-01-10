@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { BackButton } from "../layouts/BackButton";
+import AdminHeader from "../admin/adminHeader";
 
 export default function AllChapter() {
   const [chapters, setChapters] = useState([]);
@@ -17,7 +19,7 @@ export default function AllChapter() {
           chaptersData.map(async (chapter) => {
             // Fetch course details
             const courseResponse = await axios.get(
-              `/courses/${chapter.courses}`
+              `/courses/${chapter.courseId}`
             );
             const courseDetails = courseResponse.data;
 
@@ -57,17 +59,20 @@ export default function AllChapter() {
   }, []);
 
   return (
-    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center justify-center py-10">
+    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center py-10">
+      <AdminHeader />
       <h1 className="animate-fade-up text-7xl py-8 text-white uppercase font-black">
         Chapters
       </h1>
       <div className="w-11/12 flex flex-col justify-center items-center bg-white p-5 animate-fade-down animate-delay-300 animate-ease-in-out rounded-lg">
-        <div className="py-5 flex flex-row">
+        <div className="py-5 flex flex-row w-full justify-between">
+          <BackButton />
           <Link to={`/admin/chapter/create`}>
             <MdOutlineAddBox className="text-2xl text-blue-400" />
           </Link>
+          <div className=""></div>
         </div>
-        <table>
+        <table className="w-full">
           <thead>
             <tr>
               <th className="border border-gray-900 font-black">No</th>
@@ -101,7 +106,7 @@ export default function AllChapter() {
                 </td>
                 <td className="border border-slate-700 rounded-md text-center">
                   <div className="flex justify-center gap x-4">
-                    <Link to={`/admin/chapter/${chapter._id}`}>
+                    <Link to={`/admin/chapter/delete/${chapter._id}`}>
                       <MdOutlineDelete className="text-2xl text-red-800" />
                     </Link>
                   </div>

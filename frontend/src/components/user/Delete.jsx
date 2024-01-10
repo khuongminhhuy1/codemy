@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function DeleteChapter() {
+export default function DeleteUser() {
   const navigate = useNavigate();
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const { id } = useParams();

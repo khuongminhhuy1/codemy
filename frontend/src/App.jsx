@@ -33,8 +33,8 @@ import DeleteQuiz from "./components/quiz/Delete";
 import AllUsers from "./components/user/All";
 import DeleteUser from "./components/user/Delete";
 import AllChapter from "./components/chapter/All";
-import DeleteChapter from "./components/user/Delete";
 import ShowUser from "./components/user/Show";
+import DeleteChapter from "./components/chapter/Delete";
 
 axios.defaults.baseURL = "http://localhost:8080";
 axios.defaults.withCredentials = true;
@@ -114,7 +114,7 @@ function App() {
                 element={<DeleteLesson />}
               />
 
-              <Route path="/lessons/edit/:id" element={<EditLesson />} />
+              <Route path="admin/lessons/edit/:id" element={<EditLesson />} />
 
               <Route path="admin/chapter" element={<AllChapter />} />
 

@@ -12,7 +12,6 @@ const Profile = () => {
 
   useEffect(() => {
     axios.get(`/user/${userId}`).then((res) => {
-      console.log(res.data, "ds");
       setUser(res.data);
     });
   }, []);
@@ -121,7 +120,7 @@ const Profile = () => {
                     className="h-[128px] w-[128px] rounded-full"
                   />
                 </div>
-                <span className="h-[200px] w-[2px] bg-black"></span>
+                <span className="h-[200px] w-[2px] bg-black ml-[80px]"></span>
                 <div className="flex flex-col">
                   <p>
                     <strong>Name: </strong> {user.name}

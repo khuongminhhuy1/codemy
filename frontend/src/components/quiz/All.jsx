@@ -4,6 +4,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
+import { BackButton } from "../layouts/BackButton";
+import AdminHeader from "../admin/adminHeader";
 
 export default function AllQuizzes() {
   const [quiz, setQuiz] = useState([]);
@@ -33,15 +35,18 @@ export default function AllQuizzes() {
   });
 
   return (
-    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center justify-center py-10">
+    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center py-10">
+      <AdminHeader />
       <h1 className="animate-fade-up text-7xl py-8  text-white uppercase font-black">
         Quiz
       </h1>
       <div className="w-11/12  flex flex-col justify-center items-center bg-white p-5 animate-fade-down animate-delay-300 animate-ease-in-out rounded-lg">
-        <div className="py-5 flex flex-row">
+        <div className="py-5 flex flex-row w-full justify-between">
+          <BackButton />
           <Link to={`/admin/quiz/create`}>
             <MdOutlineAddBox className="text-2xl text-blue-400" />
           </Link>
+          <div className=""></div>
         </div>
         <table className="w-full border-separate border-spacing-2">
           <thead>

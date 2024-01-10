@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function DeleteCourse() {
+export default function DeleteChapter() {
   const navigate = useNavigate();
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const { id } = useParams();
@@ -30,11 +30,11 @@ export default function DeleteCourse() {
     <div className="w-screen h-[800px] bg-user-background flex flex-col justify-center items-center">
       <h1 className="animate-fade-up text-4xl py-8  text-white uppercase font-black">
         {" "}
-        Delete Course
+        Delete Chapter
       </h1>
       <div className="animate-fade-down animate-ease-in-out animate-delay-300 w-[650px] p-5 rounded-lg  flex flex-col bg-white justify-center items-center ">
         <div className="flex flex-col w-[600px] p-8 mx-auto border-2 items-center">
-          Are you sure you wanna delete this course ?
+          Are you sure you wanna delete this chapter ?
         </div>
         <div className="flex flex-row pt-5">
           <button

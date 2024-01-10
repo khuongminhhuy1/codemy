@@ -92,7 +92,6 @@ const QuizComponent = ({ questions, onSubmit, courseId }) => {
               {currentQuestion === questions.length - 1 && (
                 <Button
                   className="bg-blue-500 text-white"
-                  
                   onClick={() => setModalOpen(true)}
                 >
                   Submit
@@ -108,7 +107,7 @@ const QuizComponent = ({ questions, onSubmit, courseId }) => {
             </Space>
           </Form>
           <Modal
-            title="Congratulations"
+            title="Congratulations on finishing your test. You can view the result in your profile page"
             centered
             open={modalOpen}
             onOk={() => setModalOpen(false)}
