@@ -31,7 +31,7 @@ export default function EditCourse() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [id]);
 
   const handleEditCourse = async (e) => {
     e.preventDefault();
@@ -40,35 +40,37 @@ export default function EditCourse() {
       formData.append("name", course.name);
       formData.append("description", course.description);
       formData.append("instructor", course.instructor);
-      formData.append("image", course.image);
 
-      const responseData = await axios
-        .put(`/courses/${id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: storedUser.role,
-          },
-          
-        })
-        .then(() => {
-          toast.success("Course Updated Successfully !");
-          navigate("/admin/courses");
-        })
-        .catch((error) => {
-          toast.error("Error while updating course");
-          console.log(error);
-        });
+      if (course.image) {
+        formData.append("image", course.image);
+      }
+
+      const responseData = await axios.put(`/courses/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: storedUser.role,
+        },
+      });
+
+      toast.success("Course Updated Successfully !");
+      navigate("/admin/courses");
     } catch (error) {
+      toast.error("Error while updating course");
       console.log(error);
     }
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    const selectedFile = e.target.files && e.target.files[0];
 
-    setCourse({ ...course, image: file });
+    if (selectedFile) {
+      console.log("Selected File:", selectedFile);
+      setCourse({ ...course, image: selectedFile });
+    } else {
+      console.error("No file selected");
+      setCourse({ ...course, image: null }); // Ensure image is set to null if no file is selected
+    }
   };
-
   return (
     <div className=" w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-screen">
       <h1 className=" animate-fade-up text-4xl py-8 uppercase text-white font-black">
@@ -91,45 +93,43 @@ export default function EditCourse() {
             placeholder="Course Name"
             className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-[350px] pl-3 truncate"
           />
+
           <label
             className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
             htmlFor="description"
           >
-            <label
-              htmlFor="description"
-              className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
-            >
-              Description :
-            </label>
-            <textarea
-              name="description"
-              id="description"
-              value={course.description}
-              onChange={(e) =>
-                setCourse({ ...course, description: e.target.value })
-              }
-              placeholder="Description"
-              cols="30"
-              rows="10"
-              className="border border-gray-400 rounded-lg text-black w-[350px] pl-3 truncate py-3"
-            />
-            <label
-              className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
-              htmlFor="instructor"
-            >
-              Instructor :
-            </label>
-            <input
-              type="text"
-              name="instructor"
-              value={course.instructor}
-              onChange={(e) =>
-                setCourse({ ...course, instructor: e.target.value })
-              }
-              className="border border-gray-400 rounded-lg text-black  h-10 w-[350px] pl-3 truncate"
-            />
+            Description :
           </label>
-          <div className="border p-3 rounded-lg border-gray-400">
+          <textarea
+            name="description"
+            id="description"
+            value={course.description}
+            onChange={(e) =>
+              setCourse({ ...course, description: e.target.value })
+            }
+            placeholder="Description"
+            cols="30"
+            rows="10"
+            className="border border-gray-400 rounded-lg text-black w-[350px] pl-3 truncate py-3"
+          />
+
+          <label
+            className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
+            htmlFor="instructor"
+          >
+            Instructor :
+          </label>
+          <input
+            type="text"
+            name="instructor"
+            value={course.instructor}
+            onChange={(e) =>
+              setCourse({ ...course, instructor: e.target.value })
+            }
+            className="border border-gray-400 rounded-lg text-black  h-10 w-[350px] pl-3 truncate"
+          />
+
+          <div className="border p-3 rounded-lg border-gray-400 mt-5">
             <label
               htmlFor="image"
               className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
@@ -144,6 +144,7 @@ export default function EditCourse() {
               onChange={handleImageChange}
             />
           </div>
+
           <button
             type="submit"
             className=" border-2 border-black-500 rounded-lg text-white bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-3 mt-8 mb-3 flex w-full justify-center items-center"

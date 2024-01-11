@@ -93,6 +93,7 @@ const QuizComponent = ({ questions, onSubmit, courseId }) => {
                 <Button
                   className="bg-blue-500 text-white"
                   onClick={() => setModalOpen(true)}
+                  htmlType="submit"
                 >
                   Submit
                 </Button>

@@ -29,6 +29,23 @@ export default function CreateLesson() {
     });
   };
 
+  const validateVideo = () => {
+    const { videoType, videoValue } = formData;
+    if (videoType === "url" && !videoValue) {
+      // Video URL is empty
+      return false;
+    } else if (videoType === "file" && !videoValue) {
+      // Video file is empty
+      return false;
+    } else if (videoType !== "url" && videoType !== "file") {
+      // Video type is invalid
+      return false;
+    } else {
+      // Video is valid
+      return true;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -45,8 +62,11 @@ export default function CreateLesson() {
       } else if (videoType === "file") {
         formDataToSend.append("uploadedVideo", videoValue);
       }
+      if (!validateVideo()) {
+        toast.error("Please provide either a video URL or a video file");
+        return;
+      }
 
-      // Make a POST request to create a new lesson
       await axios.post("/lessons/create", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -60,6 +80,7 @@ export default function CreateLesson() {
       navigate("/admin/lessons");
     } catch (error) {
       console.error("Error creating lesson:", error);
+      toast.error("All fields must be required");
     }
   };
   return (
@@ -78,6 +99,7 @@ export default function CreateLesson() {
             value={formData.title}
             onChange={handleChange}
             className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-full pl-3 truncate"
+            required
           />
 
           <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -99,6 +121,7 @@ export default function CreateLesson() {
             value={formData.uploadedBy}
             onChange={handleChange}
             className="w-full border border-gray-400 rounded-lg text-black bg-white-800 h-10  pl-3 truncate"
+            required
           />
 
           <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">
@@ -112,26 +135,31 @@ export default function CreateLesson() {
           >
             <option value="url">URL</option>
             <option value="file">File</option>
-    
           </select>
 
           {formData.videoType === "url" && (
             <div>
-              <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">Video URL:</label>
+              <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">
+                Video URL:
+              </label>
               <input
                 type="text"
                 name="videoValue"
                 value={formData.videoValue}
                 onChange={handleChange}
                 className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-full pl-3 truncate"
+                required
               />
             </div>
           )}
 
           {formData.videoType === "file" && (
             <div>
-              <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">Upload Video:</label>
+              <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">
+                Upload Video:
+              </label>
               <input
+                accept=".mp4 , .avi"
                 type="file"
                 name="videoValue"
                 onChange={handleFileChange}

@@ -3,6 +3,8 @@ import { User } from "../models/userModel.js";
 import { hashPassword, comparePassword } from "../utils/hashPassword.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { Comment } from "../models/commentModel.js";
+import { Result } from "../models/resultModel.js"
 
 export const RegisterUser = async (req, res) => {
   try {
@@ -199,13 +201,19 @@ export const DeleteUser = async (req, res) => {
   try {
     const id = req.params.id;
   
-    const result = await User.findByIdAndDelete(id);
-    if (!result) {
-      res.status(404).json({ message: "User not found" });
-    }else {
-      return res.status(200).send({ message: "User Deleted successfully" 
-    });}
+    // Delete user and capture the deleted user document
+    const deletedUser = await User.findByIdAndDelete(id);
     
+    // Check if user exists
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Manually delete associated comments
+    await Comment.deleteMany({ userId: deletedUser._id });
+    await Result.deleteMany({ userId: deletedUser._id });
+
+    res.status(200).send({ message: "User and associated comments deleted successfully" });
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });

@@ -1,5 +1,6 @@
 import { Course } from "../models/courseModel.js";
 import { upload } from "../utils/multer.js";
+import { User } from "../models/userModel.js";
 
 export const CreateCourse = async (req, res, next) => {
   try {
@@ -62,31 +63,29 @@ export const GetCourseByID = async (req, res) => {
 
 export const EditCourse = async (req, res) => {
   try {
-    const { name, description, instructor } = req.body;
-    const course = await Course.findByIdAndUpdate(
-      {
-        _id: req.params.id,
-      },
-      {
-        name: req.body.name,
-        description: req.body.description,
-        instructor: req.body.instructor,
-        image: req.file.filename,
-      },
-      {
-        new: true,
-      }
-    );
-    if (!course) {
-      return res.status(404).send("Course not found");
+    const existingCourse = req.existingCourse;
+
+    // Check if a new image has been provided
+    if (req.file && (!existingCourse || (existingCourse && existingCourse.image !== req.file.filename))) {
+      // Update course information with new values
+      existingCourse.name = req.body.name;
+      existingCourse.description = req.body.description;
+      existingCourse.instructor = req.body.instructor;
+      existingCourse.image = req.file.filename;
+
+      // Save the updated course
+      const updatedCourse = await existingCourse.save();
+
+      return res.status(200).json(updatedCourse);
     }
-    res.status(200).json(course);
+
+    // No new image provided, return existing course information
+    return res.status(200).json(existingCourse);
   } catch (error) {
-    console.log(error);
-    res.status(500).send({ message: "Internal Server Error" });
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
 //Delete Course
 export const DeleteCourse = async (req, res) => {
   try {
@@ -96,6 +95,8 @@ export const DeleteCourse = async (req, res) => {
     if (!result) {
       res.status(404).json({ message: "Course not found" });
     }
+    await User.updateMany({}, { $pull: { bookmarks: result._id } });
+
     return res.status(200).send({ message: "Course Deleted successfully" });
   } catch (error) {
     console.log(error.message);

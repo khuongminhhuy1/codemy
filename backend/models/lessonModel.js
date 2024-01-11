@@ -19,6 +19,7 @@ const lessonSchema = mongoose.Schema(
     },
     uploadedVideo: {
       type: String,
+      
     },
   },
   {

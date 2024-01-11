@@ -54,7 +54,7 @@ export default function CreateCourse() {
       navigate("/"); // Redirect to the home page or wherever appropriate
     } catch (error) {
       console.error("Error during course creation:", error);
-      toast.error("Failed to create course. Please try again.");
+      toast.error("Failed to create course. All fields must be required");
     }
   };
   return (
@@ -82,6 +82,7 @@ export default function CreateCourse() {
             onChange={(e) => setData({ ...data, name: e.target.value })}
             placeholder="Course Name"
             className="border border-gray-400 rounded-lg text-black bg-white-800 h-10 w-[350px] pl-3 truncate"
+            required
           />
           <label
             className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
@@ -116,6 +117,7 @@ export default function CreateCourse() {
               id="instructor"
               onChange={(e) => setData({ ...data, instructor: e.target.value })}
               className="border border-gray-400 rounded-lg text-black  h-10 w-[350px] pl-3 truncate"
+              required
             />
           </label>
 
@@ -132,6 +134,7 @@ export default function CreateCourse() {
               name="image"
               accept="image/*"
               onChange={handleImageChange}
+              required
             />
           </div>
           <button

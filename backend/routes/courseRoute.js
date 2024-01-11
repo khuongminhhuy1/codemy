@@ -9,7 +9,7 @@ import {
   GetCourseByID,
 } from "../controllers/courseController.js";
 import { upload } from "../utils/multer.js";
-import { checkExistImage } from "../middleware/validation.js";
+import { checkExistCourseImage, checkExistImage } from "../middleware/validation.js";
 import { checkUserRole } from "../middleware/Auth.js";
 
 router.use(
@@ -25,7 +25,7 @@ router.get("/:id", GetCourseByID);
 router.put(
   "/:id",
   upload("image"),
-  checkExistImage("Image is required"),
+  checkExistCourseImage,
   EditCourse
 );
 router.delete("/:id", checkUserRole, DeleteCourse);

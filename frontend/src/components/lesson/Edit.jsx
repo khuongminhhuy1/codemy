@@ -56,6 +56,22 @@ const EditLesson = () => {
       videoValue: e.target.files[0],
     });
   };
+  const validateVideo = () => {
+    const { videoType, videoValue } = formData;
+    if (videoType === "url" && !videoValue) {
+      // Video URL is empty
+      return false;
+    } else if (videoType === "file" && !videoValue) {
+      // Video file is empty
+      return false;
+    } else if (videoType !== "url" && videoType !== "file") {
+      // Video type is invalid
+      return false;
+    } else {
+      // Video is valid
+      return true;
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,6 +88,12 @@ const EditLesson = () => {
         formDataToSend.append("videoUrl", videoValue);
       } else if (videoType === "file") {
         formDataToSend.append("uploadedVideo", videoValue);
+      }
+      if (!validateVideo()) {
+        toast.error("Please provide either a video URL or a video file");
+        // Video is invalid, show an error message
+        console.error("Please provide either a video URL or a video file");
+        return;
       }
 
       // Make a PUT request to update the lesson

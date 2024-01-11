@@ -72,7 +72,11 @@ export default function CreateChapter() {
       courseId,
       lessons,
     };
-    console.log("Complete Form Data:", requestData);
+    if (!courseId && !lessons && !values) {
+      toast.error("All fields must be required");
+      return false;
+    }
+
     const res = await axios.post("/chapter/create", requestData, {
       headers: {
         "Content-Type": "application/json",
@@ -130,7 +134,11 @@ export default function CreateChapter() {
             />
           </Space>
         </Form.Item>
-        <Form.Item name="content" label="Title">
+        <Form.Item
+          name="content"
+          label="Title"
+          rules={[{ required: true, message: "Please input the content" }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item name="lessons" label="Lessons">

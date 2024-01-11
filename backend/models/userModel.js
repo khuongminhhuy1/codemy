@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Comment } from "./commentModel.js"
 
 const userSchema = mongoose.Schema(
   {
@@ -40,6 +41,12 @@ const userSchema = mongoose.Schema(
   }
 );
 
+userSchema.pre('remove', async function (next) {
+  console.log('Pre-remove hook triggered');
+  await Comment.deleteMany({ userId: this._id });
+  next();
+});
+
 userSchema.methods.addBookmark = async function (courseId) {
   if (!this.bookmarks.includes(courseId)) {
     this.bookmarks.push(courseId);
@@ -53,6 +60,8 @@ userSchema.methods.removeBookmark = async function (courseId) {
     await this.save();
   }
 };
+
+
 
 
 export const User = mongoose.model("users", userSchema);

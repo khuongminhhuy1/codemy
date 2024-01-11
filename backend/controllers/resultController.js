@@ -1,4 +1,4 @@
-import Result from "../models/resultModel.js";
+import { Result } from "../models/resultModel.js";
 import { Quiz } from "../models/quizModel.js";
 import mongoose from "mongoose";
 
@@ -36,5 +36,9 @@ export const ReturnResult = async (req,res) => {
   } catch (error) {
     console.log(error)
   }
+}
+//Delete Result
+export const DeleteResult = async (req,res) => {
+
 }
 
