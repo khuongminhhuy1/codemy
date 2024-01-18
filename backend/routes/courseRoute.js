@@ -9,7 +9,7 @@ import {
   GetCourseByID,
 } from "../controllers/courseController.js";
 import { upload } from "../utils/multer.js";
-import { checkExistCourseImage, checkExistImage } from "../middleware/validation.js";
+
 import { checkUserRole } from "../middleware/Auth.js";
 
 router.use(
@@ -24,8 +24,8 @@ router.post("/create", checkUserRole, CreateCourse);
 router.get("/:id", GetCourseByID);
 router.put(
   "/:id",
+  checkUserRole,
   upload("image"),
-  checkExistCourseImage,
   EditCourse
 );
 router.delete("/:id", checkUserRole, DeleteCourse);

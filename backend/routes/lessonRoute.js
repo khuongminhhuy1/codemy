@@ -9,7 +9,7 @@ import {
   GetLessonByID,
 } from "../controllers/lessonController.js";
 import { checkUserRole } from "../middleware/Auth.js";
-import { checkExistVideo } from "../middleware/validation.js";
+
 import { videoUpload } from "../utils/multer.js";
 
 router.use(
@@ -26,7 +26,6 @@ router.put(
   "/:id",
   checkUserRole,
   videoUpload("uploadedVideo"),
-  checkExistVideo("abc"),
   EditLesson
 );
 router.delete("/:id", checkUserRole, DeleteLesson);

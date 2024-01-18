@@ -13,6 +13,8 @@ export default function EditCourse() {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const { id } = useParams();
+  const [oldImage, setOldImage] = useState("");
+  const [newImage, setNewImage] = useState(null);
 
   useEffect(() => {
     axios
@@ -26,6 +28,7 @@ export default function EditCourse() {
             instructor: res.data.instructor,
             image: res.data.image,
           });
+          setOldImage(`http://localhost:8080/images/${res.data.image}`);
         }
       })
       .catch((error) => {
@@ -40,9 +43,9 @@ export default function EditCourse() {
       formData.append("name", course.name);
       formData.append("description", course.description);
       formData.append("instructor", course.instructor);
-
-      if (course.image) {
-        formData.append("image", course.image);
+      // Nếu có ảnh mới, cập nhật ảnh mới
+      if (newImage) {
+        formData.append("image", newImage);
       }
 
       const responseData = await axios.put(`/courses/${id}`, formData, {
@@ -64,7 +67,8 @@ export default function EditCourse() {
     const selectedFile = e.target.files && e.target.files[0];
 
     if (selectedFile) {
-      console.log("Selected File:", selectedFile);
+      setNewImage(selectedFile);
+      setOldImage(URL.createObjectURL(selectedFile));
       setCourse({ ...course, image: selectedFile });
     } else {
       console.error("No file selected");
@@ -136,6 +140,7 @@ export default function EditCourse() {
             >
               Course Image:
             </label>
+            {oldImage && <img src={oldImage} alt="Old User Image" />}
             <input
               type="file"
               id="image"

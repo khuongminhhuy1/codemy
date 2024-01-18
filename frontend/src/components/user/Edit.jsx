@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import userInfo from "../../hooks/userInfo";
+import { UserBackButton } from "../layouts/UserBackButton";
 export default function EditUser() {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   // const { id } = storedUser;
@@ -12,13 +12,23 @@ export default function EditUser() {
   const [user, setUser] = useState({
     isAdmin: "",
   });
+  const [oldImage, setOldImage] = useState("");
+  const [newImage, setNewImage] = useState(null);
 
   useEffect(() => {
-    axios.get(`/user/${userId}`).then((res) => {
-      console.log(res.data, "ds");
-      setUser(res.data);
-    });
-  }, []);
+    axios
+      .get(`/user/${userId}`)
+      .then((res) => {
+        if (res.data) {
+          console.log(res.data, "ds");
+          setUser(res.data);
+        }
+        setOldImage(`http://localhost:8080/images/${res.data.avatar}`);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userId]);
 
   const handleEditUser = async (e) => {
     e.preventDefault();
@@ -29,8 +39,8 @@ export default function EditUser() {
       formData.append("phoneNumber", user.phoneNumber);
 
       // Check if a new image is selected
-      if (user.avatar instanceof File) {
-        formData.append("avatar", user.avatar);
+      if (newImage) {
+        formData.append("image", newImage);
       }
 
       if (storedUser.role === "admin") {
@@ -59,14 +69,25 @@ export default function EditUser() {
     }
   };
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setUser({ ...user, avatar: file });
+    const selectedFile = e.target.files && e.target.files[0];
+
+    if (selectedFile) {
+      setNewImage(selectedFile);
+      setOldImage(URL.createObjectURL(selectedFile));
+      setCourse({ ...course, image: selectedFile });
+    } else {
+      console.error("No file selected");
+      setCourse({ ...course, image: null }); // Ensure image is set to null if no file is selected
+    }
   };
   return (
     <div className=" w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-screen">
-      <div className="animate-fade-down animate-delay-[500ms] p-4 flex flex-col justify-between items-center h-[650px] w-[400px] border bg-white rounded-lg">
+      <div className="animate-fade-down animate-delay-[500ms] p-4 flex flex-col justify-between items-center h-[750px] w-[400px] border bg-white rounded-lg">
+        <div className="w-full flex justify-start">
+          <UserBackButton />
+        </div>
         <h1 className="text-xl my-8 uppercase font-black"> Update </h1>
-        <form action="" onSubmit={handleEditUser} className="h-[550px]">
+        <form action="" onSubmit={handleEditUser} className="h-[650px]">
           {/* Name */}
           <label className="block my-2 text-sm font-medium text-gray-900 dark:text-black">
             Name
@@ -118,6 +139,13 @@ export default function EditUser() {
           >
             Avatar
           </label>
+          {oldImage && (
+            <img
+              src={oldImage}
+              alt="Old User Image"
+              className="h-[100px] w-[100px] rounded-full mb-2"
+            />
+          )}
           <input
             type="file"
             name="avatar"

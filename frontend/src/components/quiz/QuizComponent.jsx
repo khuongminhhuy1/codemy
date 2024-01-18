@@ -42,78 +42,83 @@ const QuizComponent = ({ questions, onSubmit, courseId }) => {
   console.log(answers);
 
   return (
-    <div className="w-full">
-      <div style={{ display: "flex" }}>
-        <div style={{ width: "30%", marginRight: "20px" }}>
-          <h3>Questions</h3>
-          <List
-            bordered
-            dataSource={questions}
-            renderItem={(item, index) => (
-              <List.Item
-                onClick={() => handleQuestionSelect(index)}
-                style={{ cursor: "pointer" }}
+    <div className="w-full h-screen bg-user-background flex flex-col items-center">
+      <h1 className="py-10 flex justify-center w-full text-3xl text-white">
+        Quiz Time!
+      </h1>
+      <div className="w-5/12 p-10 bg-white rounded-lg">
+        <div className="w-full h-[270px] flex flex-row justify-between items-center">
+          <div className="w-4/12">
+            <Form form={form} onFinish={onFinish} layout="vertical">
+              <Form.Item
+                label={`Q${currentQuestion + 1}: ${
+                  questions[currentQuestion]?.text
+                }`}
+                name={`question_${currentQuestion}`}
               >
-                {`${index + 1}`}
-              </List.Item>
-            )}
-          />
-        </div>
-        <div style={{ width: "70%" }}>
-          <Form form={form} onFinish={onFinish} layout="vertical">
-            <Form.Item
-              label={`Q${currentQuestion + 1}: ${
-                questions[currentQuestion]?.text
-              }`}
-              name={`question_${currentQuestion}`}
-            >
-              <Radio.Group
-                className="flex flex-col "
-                onChange={handleChange(questions[currentQuestion]?._id)}
-              >
-                {questions[currentQuestion]?.options.map(
-                  (option, optionIndex) => (
-                    <Radio className="p-3" key={optionIndex} value={option}>
-                      {option}
-                    </Radio>
-                  )
-                )}
-              </Radio.Group>
-            </Form.Item>
+                <Radio.Group
+                  className="flex flex-col "
+                  onChange={handleChange(questions[currentQuestion]?._id)}
+                >
+                  {questions[currentQuestion]?.options.map(
+                    (option, optionIndex) => (
+                      <Radio className="p-3" key={optionIndex} value={option}>
+                        {option}
+                      </Radio>
+                    )
+                  )}
+                </Radio.Group>
+              </Form.Item>
 
-            <Space>
-              <Button
-                className="bg-blue-500 text-white"
-                onClick={handlePrev}
-                disabled={currentQuestion === 0}
-              >
-                Previous
-              </Button>
-              {currentQuestion === questions.length - 1 && (
+              <Space>
                 <Button
                   className="bg-blue-500 text-white"
-                  onClick={() => setModalOpen(true)}
-                  htmlType="submit"
+                  onClick={handlePrev}
+                  disabled={currentQuestion === 0}
                 >
-                  Submit
+                  Previous
                 </Button>
+                {currentQuestion === questions.length - 1 && (
+                  <Button
+                    className="bg-blue-500 text-white"
+                    onClick={() => setModalOpen(true)}
+                    htmlType="submit"
+                  >
+                    Submit
+                  </Button>
+                )}
+                <Button
+                  className="bg-blue-500 text-white"
+                  onClick={handleNext}
+                  disabled={currentQuestion === questions.length - 1}
+                >
+                  Next
+                </Button>
+              </Space>
+            </Form>
+            <Modal
+              title="Congratulations on finishing your test. You can view the result in your profile page"
+              centered
+              open={modalOpen}
+              onOk={() => setModalOpen(false)}
+              onCancel={() => setModalOpen(false)}
+            ></Modal>
+          </div>
+          <div className="w-2/12 mr-20 ">
+            <h3>Questions</h3>
+            <List
+              bordered
+              dataSource={questions}
+              renderItem={(item, index) => (
+                <List.Item
+                  onClick={() => handleQuestionSelect(index)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {`${index + 1}`}
+                </List.Item>
               )}
-              <Button
-                className="bg-blue-500 text-white"
-                onClick={handleNext}
-                disabled={currentQuestion === questions.length - 1}
-              >
-                Next
-              </Button>
-            </Space>
-          </Form>
-          <Modal
-            title="Congratulations on finishing your test. You can view the result in your profile page"
-            centered
-            open={modalOpen}
-            onOk={() => setModalOpen(false)}
-            onCancel={() => setModalOpen(false)}
-          ></Modal>
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -32,12 +32,15 @@ const QuizPage = () => {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      <h1 className="pb-10">Quiz Time!</h1>
-      <QuizComponent
-        questions={questions}
-        onSubmit={handleQuizSubmit}
-        courseId={courseId.id}
-      />
+      {questions.length > 0 ? (
+        <QuizComponent
+          questions={questions}
+          onSubmit={handleQuizSubmit}
+          courseId={courseId.id}
+        />
+      ) : (
+        "There's no quizzes for this course yet"
+      )}
     </div>
   );
 };

@@ -63,27 +63,34 @@ export const GetCourseByID = async (req, res) => {
 
 export const EditCourse = async (req, res) => {
   try {
-    const existingCourse = req.existingCourse;
-
-    // Check if a new image has been provided
-    if (req.file && (!existingCourse || (existingCourse && existingCourse.image !== req.file.filename))) {
-      // Update course information with new values
-      existingCourse.name = req.body.name;
-      existingCourse.description = req.body.description;
-      existingCourse.instructor = req.body.instructor;
-      existingCourse.image = req.file.filename;
-
-      // Save the updated course
-      const updatedCourse = await existingCourse.save();
-
-      return res.status(200).json(updatedCourse);
+    const {name , description , instructor} = req.body
+ 
+    let updateFields = {
+      name,
+      description,
+      instructor,
     }
-
-    // No new image provided, return existing course information
-    return res.status(200).json(existingCourse);
+    if(req?.file){
+      updateFields = {
+        ...updateFields,
+        image: req.file.filename,
+      }
+    }else {
+      updateFields = {
+        ...updateFields,
+      }
+    }
+    console.log("Update fields:", updateFields);
+    const course = await Course.findByIdAndUpdate(req.params.id , updateFields ,{
+      new : true
+    })
+    if(!course){
+      return res.status(404).json("Course not found")
+    }
+    res.status(200).json({ message: "Course updated successfully",course});
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 //Delete Course

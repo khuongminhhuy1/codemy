@@ -14,8 +14,8 @@ import {
   GetUsers,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
-import { avatarUpload, upload } from "../utils/multer.js";
-import { checkExistImage } from "../middleware/validation.js";
+import { upload } from "../utils/multer.js";
+
 import { Search } from "../controllers/courseController.js";
 
 router.use(
@@ -32,7 +32,6 @@ router.get("/profile", verifyToken, GetProfile);
 router.put(
   "/profile/edit/:id",
   upload("avatar"),
-  checkExistImage("Image is required"),
   EditUser
 );
 

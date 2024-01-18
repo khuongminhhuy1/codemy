@@ -72,8 +72,17 @@ export default function CreateChapter() {
       courseId,
       lessons,
     };
-    if (!courseId && !lessons && !values) {
-      toast.error("All fields must be required");
+    if (!content) {
+      toast.error("Title needed");
+      return false;
+    }
+    if (!courseId) {
+      toast.error("A course must be required");
+      return false;
+    }
+
+    if (lessons.length <= 0) {
+      toast.error("Lesson must be choosen");
       return false;
     }
 
@@ -134,11 +143,7 @@ export default function CreateChapter() {
             />
           </Space>
         </Form.Item>
-        <Form.Item
-          name="content"
-          label="Title"
-          rules={[{ required: true, message: "Please input the content" }]}
-        >
+        <Form.Item name="content" label="Title">
           <Input />
         </Form.Item>
         <Form.Item name="lessons" label="Lessons">

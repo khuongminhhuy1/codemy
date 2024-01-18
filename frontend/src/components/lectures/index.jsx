@@ -9,16 +9,15 @@ export default function ShowLectures() {
   const [lessonId, setLessonId] = useState("");
   const [data, setData] = useState([]);
   const courseId = useParams();
-  console.log(courseId)
+  console.log(courseId);
   useEffect(() => {
     axios
       .get(`/chapter/${courseId.id}`)
       .then((res) => {
         if (res.data) {
-          
           let totalLesson = 0;
           const data = res.data.map((chapter, chapterIndex) => {
-            console.log(chapter)
+            console.log(chapter);
             return {
               key: chapter._id,
               label: `${chapterIndex + 1}.${chapter.content}`,
@@ -52,41 +51,48 @@ export default function ShowLectures() {
   };
   useEffect(() => {}, [lessonId]);
   return (
-    <div className="w-full flex flex-row ">
-      <div className="w-4/5 bg-gray-900 flex justify-center items-center p-5 ">
-        {currentLesson?.videoUrl ? (
-          <iframe
-            width="100%"
-            height="702"
-            src={currentLesson.videoUrl}
-            title={currentLesson.title}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
-        ) : currentLesson.uploadedVideo ? (
-          <video
-            src={`http://localhost:8080/videos/${currentLesson.uploadedVideo}`}
-            alt={currentLesson.title}
-            controls
-          />
-        ) : (
-          <p> No video</p>
-        )}
-      </div>
-      <div className="w-1/5 bg-blue-500">
-        {/* Menu */}
-        <Menu
-          onClick={onClick}
-          style={{
-            width: "full",
-          }}
-          defaultSelectedKeys={["65759bfc2d48c0da9b7fe852"]}
-          defaultOpenKeys={["657d751f9eada2d1eb34c578"]}
-          mode="inline"
-          items={data}
-        />
-      </div>
+    <div className="w-full flex flex-row h-screen ">
+      {data.length === 0 ? (
+        <p>No videos available.</p>
+      ) : (
+        <>
+          <div className="w-4/5 bg-slate-500 flex justify-center items-center p-5 ">
+            {currentLesson?.videoUrl ? (
+              <iframe
+                width="100%"
+                height="702"
+                src={currentLesson.videoUrl}
+                title={currentLesson.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              ></iframe>
+            ) : currentLesson.uploadedVideo ? (
+              <video
+                src={`http://localhost:8080/videos/${currentLesson.uploadedVideo}`}
+                alt={currentLesson.title}
+                controls
+              />
+            ) : (
+              <p className="text-2xl">
+                Choose the Chapter and Lessons from the menu to start learning{" "}
+              </p>
+            )}
+          </div>
+          <div className="w-1/5 bg-slate-400">
+            <Menu
+              onClick={onClick}
+              style={{
+                width: "full",
+              }}
+              defaultSelectedKeys={[""]}
+              defaultOpenKeys={[data[0]?.key]}
+              mode="inline"
+              items={data}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

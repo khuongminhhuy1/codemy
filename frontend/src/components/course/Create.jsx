@@ -33,8 +33,6 @@ export default function CreateCourse() {
       formData.append("instructor", instructor);
       formData.append("image", image);
 
-      console.log("image", image);
-
       const responseData = await axios.post("/courses/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
