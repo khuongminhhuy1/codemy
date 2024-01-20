@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-import { Course } from "./courseModel.js";
-import { Lesson } from "./lessonModel.js";
 
 const chapterSchema = mongoose.Schema(
   {

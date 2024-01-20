@@ -110,68 +110,70 @@ export default function CreateChapter() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center mt-5">
-      <h1> ABC</h1>
-      <Form
-        {...layout}
-        form={form}
-        name="control-hooks"
-        onFinish={onFinish}
-        style={{
-          minWidth: 900,
-          marginTop: 30,
-        }}
-      >
-        <Form.Item name="course" label="Courses">
-          <Space
-            style={{
-              width: "100%",
-            }}
-            direction="vertical"
-          >
-            <Select
-              mode="one"
-              allowClear
+    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center py-10">
+      <h1 className="text-7xl pt-2 font-black text-white"> Create Chapter</h1>
+      <div className="w-8/12 flex flex-col items-center mt-5 bg-white rounded-lg">
+        <Form
+          {...layout}
+          form={form}
+          name="control-hooks"
+          onFinish={onFinish}
+          style={{
+            minWidth: 900,
+            marginTop: 30,
+          }}
+        >
+          <Form.Item name="course" label="Courses">
+            <Space
               style={{
                 width: "100%",
               }}
-              placeholder="Please select"
-              onChange={handleCourseChange}
-              filterOption={filterOption}
-              options={course.courseId}
-              name="courseId"
-            />
-          </Space>
-        </Form.Item>
-        <Form.Item name="content" label="Title">
-          <Input />
-        </Form.Item>
-        <Form.Item name="lessons" label="Lessons">
-          <Space
-            style={{
-              width: "100%",
-            }}
-            direction="vertical"
-          >
-            <Select
-              mode="multiple"
-              allowClear
+              direction="vertical"
+            >
+              <Select
+                mode="one"
+                allowClear
+                style={{
+                  width: "100%",
+                }}
+                placeholder="Please select"
+                onChange={handleCourseChange}
+                filterOption={filterOption}
+                options={course.courseId}
+                name="courseId"
+              />
+            </Space>
+          </Form.Item>
+          <Form.Item name="content" label="Title">
+            <Input />
+          </Form.Item>
+          <Form.Item name="lessons" label="Lessons">
+            <Space
               style={{
                 width: "100%",
               }}
-              placeholder="Please select"
-              onChange={handleLessonChange}
-              filterOption={filterOption}
-              options={lesson.lessons}
-            />
-          </Space>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" className=" bg-blue-500" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+              direction="vertical"
+            >
+              <Select
+                mode="multiple"
+                allowClear
+                style={{
+                  width: "100%",
+                }}
+                placeholder="Please select"
+                onChange={handleLessonChange}
+                filterOption={filterOption}
+                options={lesson.lessons}
+              />
+            </Space>
+          </Form.Item>
+          <Form.Item className="flex flex-row justify-center">
+            <Button type="primary" className=" bg-blue-500 " htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
     </div>
   );
 }
