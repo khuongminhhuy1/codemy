@@ -15,11 +15,14 @@ const seedUser = {
 
 async function seedDatabase() {
   try {
+    console.log(process.env.DB_URL)
     // Connect to MongoDB
-    await mongoose.connect("mongodb://127.0.0.1:27017/online-academy", {
-      serverSelectionTimeoutMS: 30000,
+    await mongoose.connect(process.env.DB_URL, {
+      serverSelectionTimeoutMS: 30000,useNewUrlParser: true 
+    }).then(() => console.log("Connected to MongoDB")).catch((error) => {
+  console.error("Error connecting to MongoDB:", error) ;
     });
-    console.log("Connected to MongoDB");
+    
 
     // Hash the password before inserting the user
     const hashedPassword = await hashPassword(seedUser.password);
