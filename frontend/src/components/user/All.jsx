@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import { MdOutlineEdit, MdOutlineDelete } from "react-icons/md";
+import {
+  MdOutlineEdit,
+  MdOutlineDelete,
+  MdOutlineAddBox,
+} from "react-icons/md";
 import { BsInfoCircle } from "react-icons/bs";
 import { BackButton } from "../layouts/BackButton";
 import AdminHeader from "../admin/adminHeader";
@@ -25,8 +29,12 @@ export default function AllUsers() {
         Users
       </h1>
       <div className=" bg-white w-11/12 rounded-md p-20">
-        <div className="m-5">
+        <div className="m-5 flex flex-row justify-between">
           <BackButton />
+          <Link to={`/register`}>
+            <MdOutlineAddBox className="text-2xl text-blue-400" />
+          </Link>
+          <div className=""></div>
         </div>
         <table className="w-full border-seperate border-spacing-2 ">
           <thead>

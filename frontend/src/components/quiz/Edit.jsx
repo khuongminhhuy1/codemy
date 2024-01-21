@@ -120,93 +120,95 @@ export default function EditQuiz() {
   console.log(options);
   console.log(form.getFieldValue(), "form");
   return (
-    <div>
-      <h2>Create Quiz</h2>
-      <Form
-        className="w-6/12 m-auto"
-        form={form}
-        onFinish={onFinish}
-        layout="vertical"
-      >
-        <Form.Item name="course" label="Courses">
-          <Space
-            style={{
-              width: "100%",
-            }}
-            direction="vertical"
-          >
-            <Select
-              showSearch
-              placeholder="Select a course"
-              optionFilterProp="children"
-              onChange={handleCourseChange}
-              filterOption={filterOption}
-              options={courses}
-              value={defaultCourse || undefined}
-              name="courses"
-            />
-          </Space>
-        </Form.Item>
-        <Form.Item
-          label="Question"
-          name="question"
-          rules={[{ required: true, message: "Please enter the question" }]}
+    <div className="w-full h-[1100px] bg-user-background flex flex-col items-center py-10">
+      <h1 className="text-7xl pt-2 font-black text-white"> Edit Quiz</h1>
+      <div className="w-8/12 pt-10 flex flex-col items-center mt-5 bg-white rounded-lg">
+        <Form
+          className="w-6/12 m-auto"
+          form={form}
+          onFinish={onFinish}
+          layout="vertical"
         >
-          <Input />
-        </Form.Item>
-
-        {options &&
-          options.map((option, index) => (
-            <Form.Item
-              key={index}
-              label={`Option ${index + 1}`}
-              name={`options[${index}]`}
-              rules={[{ required: true, message: "Please enter the option" }]}
-              initialValue={option}
+          <Form.Item name="course" label="Courses">
+            <Space
+              style={{
+                width: "100%",
+              }}
+              direction="vertical"
             >
-              <Input
-                onChange={(e) => handleOptionChange(index, e.target.value)}
-                addonAfter={
-                  options.length > 1 ? (
-                    <Button type="link" onClick={() => removeOption(index)}>
-                      <FaTrash />
-                    </Button>
-                  ) : null
-                }
+              <Select
+                showSearch
+                placeholder="Select a course"
+                optionFilterProp="children"
+                onChange={handleCourseChange}
+                filterOption={filterOption}
+                options={courses}
+                value={defaultCourse || undefined}
+                name="courses"
               />
-            </Form.Item>
-          ))}
+            </Space>
+          </Form.Item>
+          <Form.Item
+            label="Question"
+            name="question"
+            rules={[{ required: true, message: "Please enter the question" }]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Button
-          type="dashed"
-          onClick={addOption}
-          className="mb-[16px] flex flex-row al w-[125px] items-center justify-between "
-        >
-          <FaPlus /> Add Option
-        </Button>
-
-        <Form.Item
-          label="Correct Answer"
-          name="correctAnswer"
-          rules={[
-            { required: true, message: "Please select the correct answer" },
-          ]}
-        >
-          <Select placeholder="Select correct answer">
-            {options.map((option, index) => (
-              <Option key={index} value={option}>
-                {option}
-              </Option>
+          {options &&
+            options.map((option, index) => (
+              <Form.Item
+                key={index}
+                label={`Option ${index + 1}`}
+                name={`options[${index}]`}
+                rules={[{ required: true, message: "Please enter the option" }]}
+                initialValue={option}
+              >
+                <Input
+                  onChange={(e) => handleOptionChange(index, e.target.value)}
+                  addonAfter={
+                    options.length > 1 ? (
+                      <Button type="link" onClick={() => removeOption(index)}>
+                        <FaTrash />
+                      </Button>
+                    ) : null
+                  }
+                />
+              </Form.Item>
             ))}
-          </Select>
-        </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className="bg-blue-500">
-            Update Quiz
+          <Button
+            type="dashed"
+            onClick={addOption}
+            className="mb-[16px] flex flex-row al w-[125px] items-center justify-between "
+          >
+            <FaPlus /> Add Option
           </Button>
-        </Form.Item>
-      </Form>
+
+          <Form.Item
+            label="Correct Answer"
+            name="correctAnswer"
+            rules={[
+              { required: true, message: "Please select the correct answer" },
+            ]}
+          >
+            <Select placeholder="Select correct answer">
+              {options.map((option, index) => (
+                <Option key={index} value={option}>
+                  {option}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" className="bg-blue-500">
+              Update Quiz
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
     </div>
   );
 }

@@ -2,7 +2,6 @@ import "dotenv/config";
 import { User } from "../models/userModel.js";
 import { hashPassword, comparePassword } from "../utils/hashPassword.js";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
 import { Comment } from "../models/commentModel.js";
 import { Result } from "../models/resultModel.js"
 

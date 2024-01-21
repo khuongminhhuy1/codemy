@@ -76,11 +76,11 @@ export default function EditCourse() {
     }
   };
   return (
-    <div className=" w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-screen">
+    <div className=" w-screen flex justify-center flex-col items-center bg-user-background bg-cover h-[1000px]">
       <h1 className=" animate-fade-up text-4xl py-8 uppercase text-white font-black">
         Edit Course
       </h1>
-      <div className="animate-fade-down animate-delay-[500ms] p-4 flex flex-col justify-center items-center w-96 border bg-white rounded-lg">
+      <div className=" animate-fade-down animate-delay-[500ms] p-4 flex flex-col justify-center items-center w-96 border bg-white rounded-lg">
         <form onSubmit={handleEditCourse}>
           <label
             className="block my-2 text-sm font-medium text-gray-900 dark:text-black"
@@ -140,7 +140,7 @@ export default function EditCourse() {
             >
               Course Image:
             </label>
-            {oldImage && <img src={oldImage} alt="Old User Image" />}
+            {oldImage && <img src={oldImage} alt="Old Course Image" />}
             <input
               type="file"
               id="image"

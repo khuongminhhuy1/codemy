@@ -12,6 +12,7 @@ export default function EditUser() {
   const [user, setUser] = useState({
     isAdmin: "",
   });
+  const [avatar, setAvatar] = useState("");
   const [oldImage, setOldImage] = useState("");
   const [newImage, setNewImage] = useState(null);
 
@@ -40,7 +41,7 @@ export default function EditUser() {
 
       // Check if a new image is selected
       if (newImage) {
-        formData.append("image", newImage);
+        formData.append("avatar", newImage);
       }
 
       if (storedUser.role === "admin") {
@@ -74,10 +75,10 @@ export default function EditUser() {
     if (selectedFile) {
       setNewImage(selectedFile);
       setOldImage(URL.createObjectURL(selectedFile));
-      setCourse({ ...course, image: selectedFile });
+      setAvatar({ ...avatar, image: selectedFile });
     } else {
       console.error("No file selected");
-      setCourse({ ...course, image: null }); // Ensure image is set to null if no file is selected
+      setAvatar({ ...avatar, image: null }); // Ensure image is set to null if no file is selected
     }
   };
   return (
