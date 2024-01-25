@@ -85,7 +85,7 @@ export default function ShowLectures() {
               style={{
                 width: "full",
               }}
-              defaultSelectedKeys={[""]}
+              defaultSelectedKeys={[]}
               defaultOpenKeys={[data[0]?.key]}
               mode="inline"
               items={data}

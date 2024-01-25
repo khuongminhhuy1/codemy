@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 
 const QuizPage = () => {
   const [questions, setQuestions] = useState([]);
+  const [totalQuiz, setTotalQuiz] = useState(0);
   const courseId = useParams();
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const QuizPage = () => {
             options: item.options,
           }));
           setQuestions(data);
+          setTotalQuiz(data.length);
         }
       })
       .catch((error) => {
@@ -26,7 +28,6 @@ const QuizPage = () => {
   }, []);
 
   const handleQuizSubmit = (values) => {
-    // Handle the submitted values (selected options) here
     console.log("Submitted values:", values);
   };
 
@@ -37,6 +38,7 @@ const QuizPage = () => {
           questions={questions}
           onSubmit={handleQuizSubmit}
           courseId={courseId.id}
+          totalQuiz={totalQuiz}
         />
       ) : (
         "There's no quizzes for this course yet"

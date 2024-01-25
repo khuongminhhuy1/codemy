@@ -3,7 +3,7 @@ import { Form, Radio, Button, Space, List, Modal } from "antd";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const QuizComponent = ({ questions, onSubmit, courseId }) => {
+const QuizComponent = ({ questions, onSubmit, courseId, totalQuiz }) => {
   const [form] = Form.useForm();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -32,6 +32,7 @@ const QuizComponent = ({ questions, onSubmit, courseId }) => {
         userId: JSON.parse(localStorage.getItem("user"))?.id,
         answers,
         courseId,
+        totalQuiz,
       });
       console.log(res, "res");
       toast.success("Submitted !");

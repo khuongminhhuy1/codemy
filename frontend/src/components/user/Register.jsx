@@ -3,7 +3,6 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { MdOutlineAddBox } from "react-icons/md";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ export default function Register() {
     password: "",
     phoneNumber: "",
   });
-  const registerUser = async (e) => {
+const registerUser = async (e) => {
     e.preventDefault();
     const { name, email, password, phoneNumber } = data;
     try {
@@ -91,12 +90,14 @@ export default function Register() {
           <input
             type="text"
             value={data.phoneNumber}
-            id="name"
-            name="name"
+            id="phoneNumber"
+            name="phoneNumber"
             onChange={(e) => setData({ ...data, phoneNumber: e.target.value })}
             placeholder="Phone Number"
             className="border border-black-100 rounded-lg text-black bg-white-800 h-10 w-64 pl-3 truncate "
+            minLength={10}
             maxLength={10}
+            pattern="[0-9]+"
           />
 
           <button

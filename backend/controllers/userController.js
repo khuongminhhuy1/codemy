@@ -28,6 +28,11 @@ export const RegisterUser = async (req, res) => {
         error: "Password is required and must be above 8 characters",
       });
     }
+    if (!phoneNumber) {
+      return res.json({
+        error: "Phone number is required",
+      });
+    }
 
     const hashedPassword = await hashPassword(password);
     const newUser = new User({
@@ -82,7 +87,7 @@ export const LoginUser = async (req, res) => {
     }
     if (!match) {
       res.json({
-        error: "Invalid Username or Password",
+        error: "Invalid Password",
       });
     }
   } catch (error) {
@@ -94,7 +99,6 @@ export const LoginUser = async (req, res) => {
 //Log out
 export const LogoutUser = async (req, res) => {
   try {
-    res.clearCookie("token");
     res.json({ message: "Logout successful" });
   } catch (error) {
     console.error(error);

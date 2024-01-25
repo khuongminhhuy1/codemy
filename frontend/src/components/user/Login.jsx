@@ -15,7 +15,6 @@ export default function Login() {
 
   const loginUser = async (e) => {
     e.preventDefault();
-
     try {
       const res = await axios.post("/login", {
         email: data.email,

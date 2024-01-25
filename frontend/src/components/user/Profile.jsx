@@ -156,7 +156,7 @@ const Profile = () => {
               <p>
                 <strong>Test Result :</strong>{" "}
               </p>
-              {result ? (
+              {result.length > 0 ? (
                 <table>
                   <thead>
                     <tr>
@@ -211,7 +211,7 @@ const Profile = () => {
                   </tbody>
                 </table>
               ) : (
-                "No Result"
+                "Student haven't taken any test"
               )}
             </>
           ) : (

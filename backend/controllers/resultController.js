@@ -3,7 +3,7 @@ import { Quiz } from "../models/quizModel.js";
 import mongoose from "mongoose";
 
 export const GetResult = async (req, res) => {
-  const { answers, userId, courseId } = req.body;
+  const { answers, userId, courseId , totalQuiz } = req.body;
   let correctAnswer = 0;
   for (let key in answers) {
     const quiz = await Quiz.findById(key)
@@ -13,7 +13,7 @@ export const GetResult = async (req, res) => {
   }
   const newResult = new Result({
     userId,
-    totalQuizzes: Object.keys(answers).length,
+    totalQuizzes: totalQuiz,
     correctedAnswer: correctAnswer,
     courseId
   });
